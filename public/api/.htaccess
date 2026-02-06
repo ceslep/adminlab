@@ -1,0 +1,54 @@
+<?php
+/**
+ * .htaccess para API REST - AdminLab
+ * Configuración de reescritura de URLs y seguridad
+ */
+
+# Habilitar reescritura de URLs
+RewriteEngine On
+
+# Configurar CORS para todas las respuestas
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+Header always set Access-Control-Allow-Credentials "true"
+
+# Manejar solicitudes OPTIONS preflight
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# Redirigir todas las solicitudes al router
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?endpoint=$1 [QSA,L]
+
+# Seguridad - Ocultar archivos .htaccess
+<Files .htaccess>
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Seguridad - Prevenir acceso a archivos sensibles
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|bak)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Comprimir respuestas
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/plain
+</IfModule>
+
+# Caching para respuestas estáticas
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType application/json "access plus 1 hour"
+    ExpiresByType application/javascript "access plus 1 day"
+    ExpiresByType text/css "access plus 1 day"
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+?>
