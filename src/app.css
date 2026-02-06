@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+/* Modern theme configuration and custom utilities */
+@theme {
+  /* Color palette based on existing AdminLab patterns */
+  --color-primary: #4f46e5;    /* indigo-600 */
+  --color-secondary: #7c3aed;  /* purple-600 */
+  --color-success: #10b981;    /* emerald-600 */
+  --color-warning: #f59e0b;    /* amber-500 */
+  --color-danger: #ef4444;      /* red-500 */
+  --color-neutral: #64748b;    /* slate-500 */
+  
+  /* Modern gradient definitions */
+  --gradient-primary: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-secondary: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  
+  /* Typography system */
+  --font-display: 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  
+  /* Spacing scale */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+}
+
+/* Custom utilities for modern interactions */
+@utility smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@utility glass-effect {
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@utility gradient-text {
+  background: var(--gradient-primary);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Enhanced animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer-modern {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* Component-specific modern styles */
+.skeleton {
+  background: linear-gradient(90deg, 
+    rgba(156, 163, 175, 0.1) 0%, 
+    rgba(156, 163, 175, 0.2) 50%, 
+    rgba(156, 163, 175, 0.1) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer-modern 2s infinite;
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+.pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+.slide-up {
+  animation: slide-up 0.5s ease-out;
+}
+
+/* Modern shadow system */
+.shadow-glow {
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.15);
+}
+
+.shadow-colored {
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.1);
+}
+
+/* Interactive states */
+.interactive {
+  @apply smooth-transition cursor-pointer;
+}
+
+.interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.interactive:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Modern card styles */
+.card-modern {
+  @apply bg-white rounded-2xl shadow-sm border border-slate-200/60 smooth-transition;
+}
+
+.card-modern:hover {
+  @apply shadow-md border-slate-300/80 transform -translate-y-1;
+}
+
+/* Button enhancements */
+.btn-primary {
+  @apply bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-xl smooth-transition shadow-md hover:shadow-lg;
+}
+
+.btn-secondary {
+  @apply bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-3 px-6 rounded-xl smooth-transition;
+}
+
+/* Modern input styles */
+.input-modern {
+  @apply w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 smooth-transition;
+}
+
+/* Enhanced focus ring */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-white;
+}
+
+/* Loading dots animation */
+@keyframes loading-dots {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Modern badge styles */
+.badge-modern {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.badge-success {
+  @apply bg-emerald-100 text-emerald-800;
+}
+
+.badge-warning {
+  @apply bg-amber-100 text-amber-800;
+}
+
+.badge-error {
+  @apply bg-red-100 text-red-800;
+}
+
+.badge-info {
+  @apply bg-indigo-100 text-indigo-800;
+}
