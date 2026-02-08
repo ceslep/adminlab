@@ -1,15 +1,16 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
     import { fly } from 'svelte/transition';
-    import { getPacientes } from '../api';
-    import type { Paciente } from '../types';
+    // import { getPacientes } from '../api';
+    // import type { Paciente } from '../types';
 
     const dispatch = createEventDispatcher<{ logout: undefined }>();
 
     export let userName: string = 'Usuario';
 
     let showPatientsView = false;
-    let pacientes: Paciente[] = [];
+    // let pacientes: Paciente[] = [];
+    let pacientes: any[] = [];
     let loading = false;
     let searchQuery = '';
     let selectedDate = '2026-02-06'; // Fecha de desarrollo
@@ -21,12 +22,16 @@
     ];
 
     async function loadPacientes() {
+        console.log('loadPacientes() llamado con:', { searchQuery, selectedDate });
         loading = true;
         try {
-            const response = await getPacientes(searchQuery, selectedDate);
-            if (response.success && response.data) {
-                pacientes = response.data;
-            }
+            // Simulate API call for testing
+            console.log('Simulando llamada a API...');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            pacientes = [
+                { nombre_completo: 'Test Patient', telefono: '123456789' }
+            ];
+            console.log('Pacientes cargados:', pacientes.length);
         } catch (error) {
             console.error('Error cargando pacientes:', error);
         } finally {
@@ -35,7 +40,9 @@
     }
 
     function handleShowPatients() {
+        console.log('Botón Gestionar Pacientes clickeado');
         showPatientsView = true;
+        console.log('Cargando pacientes...');
         loadPacientes();
     }
 
@@ -109,7 +116,10 @@
                             
                             {#if card.title === 'Pacientes'}
                                 <button
-                                    on:click={handleShowPatients}
+                                    on:click={() => {
+                                        console.log('Botón clickeado directamente');
+                                        handleShowPatients();
+                                    }}
                                     class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center justify-center"
                                 >
                                     <i class="bi bi-people-fill mr-2"></i>
