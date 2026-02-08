@@ -93,19 +93,38 @@
             <div in:fly={{ y: 20, duration: 400, delay: 200 }} class="max-w-7xl mx-auto">
                 <h3 class="text-3xl font-bold text-gray-900 mb-2">Panel de Control</h3>
                 <p class="text-gray-600 mb-8">Aquí se mostrarán los datos y funcionalidades del laboratorio.</p>
+                <!-- Dashboard Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Dashboard Cards -->
                     {#each dashboardCards as card, i}
                         <div
                             in:fly={{ y: 20, duration: 400, delay: 300 + (i * 100) }}
-                            class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer border border-transparent hover:border-indigo-400"
-                            on:click={card.title === 'Pacientes' ? handleShowPatients : undefined}
+                            class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200"
                         >
                             <div class={`bg-${card.color}-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4`}>
                                 <i class={`bi bi-${card.title === 'Pacientes' ? 'people' : 'person'} text-2xl text-${card.color}-600`}></i>
                             </div>
                             <h4 class="font-bold text-lg text-gray-900 mb-2">{card.title}</h4>
-                            <p class="text-sm text-gray-600">{card.description}</p>
+                            <p class="text-sm text-gray-600 mb-4">{card.description}</p>
+                            
+                            {#if card.title === 'Pacientes'}
+                                <button
+                                    on:click={handleShowPatients}
+                                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center justify-center"
+                                >
+                                    <i class="bi bi-people-fill mr-2"></i>
+                                    Gestionar Pacientes
+                                </button>
+                            {:else}
+                                <button
+                                    disabled
+                                    class="w-full bg-gray-300 text-gray-500 px-4 py-2 rounded-lg font-medium cursor-not-allowed flex items-center justify-center"
+                                    title="Próximamente"
+                                >
+                                    <i class="bi bi-gear mr-2"></i>
+                                    Próximamente
+                                </button>
+                            {/if}
                         </div>
                     {/each}
                 </div>
