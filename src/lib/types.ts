@@ -11,6 +11,7 @@ export interface User {
 // Define the Paciente interface
 export interface Paciente {
     id_paciente: number;
+    identificacion: string;
     nombre: string;
     apellido: string;
     nombre_completo: string;
@@ -24,6 +25,7 @@ export interface Paciente {
     edad_texto: string;
     estado: string;
     color_estado: string;
+    entidad: string;
     usuario_registro: string;
     fecha_registro: string;
     examenes: string[];

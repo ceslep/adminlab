@@ -227,6 +227,10 @@
                                                  <i class="bi bi-activity mr-1"></i>
                                                  {paciente.estado}
                                              </span>
+                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 ml-2">
+                                                 <i class="bi bi-hospital mr-1"></i>
+                                                 {paciente.entidad || 'N/A'}
+                                             </span>
                                         </div>
                                     </div>
                                 </div>
@@ -243,7 +247,7 @@
                                      </div>
                                      <div class="flex items-center text-gray-600">
                                          <i class="bi bi-person-badge mr-2 text-gray-400"></i>
-                                         <span>ID: {paciente.id_paciente}</span>
+                                         <span>{paciente.identificacion || 'N/A'}</span>
                                      </div>
                                      <div class="flex items-center text-gray-600">
                                          <i class="bi bi-calendar-check mr-2 text-gray-400"></i>
