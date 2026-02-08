@@ -39,17 +39,15 @@ export async function login(credentials: { username: string; password: string })
  * @returns A promise that resolves with the patients API response
  */
 export async function getPacientes(search?: string, fecha?: string): Promise<ApiResponse<Paciente[]>> {
-    // Always use production API
-    const params = new URLSearchParams();
-    if (search) params.append('search', search);
-    if (fecha) params.append('fecha', fecha);
+    // Always use production API with POST method
+    const formData = new FormData();
+    if (search) formData.append('search', search);
+    if (fecha) formData.append('fecha', fecha);
 
     try {
-        const response = await fetch(`${API_BASE_URL}${PACIENTES_ENDPOINT}?${params.toString()}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
+        const response = await fetch(`${API_BASE_URL}${PACIENTES_ENDPOINT}`, {
+            method: 'POST',
+            body: formData
         });
 
         if (!response.ok) {

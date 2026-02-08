@@ -5,13 +5,13 @@ header('Content-Type: application/json');
 require_once 'cors.php';
 require_once '../datos_conexion.php'; // Adjust path as necessary
 
-$response = ['success' => false, 'message' => 'Método no permitido.'];
+$response = ['success' => false, 'message' => 'Método no permitido. Use POST.'];
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Get query parameters
-        $search = isset($_GET['search']) ? trim($_GET['search']) : '';
-        $fecha = isset($_GET['fecha']) ? trim($_GET['fecha']) : '';
+        // Get POST parameters
+        $search = isset($_POST['search']) ? trim($_POST['search']) : '';
+        $fecha = isset($_POST['fecha']) ? trim($_POST['fecha']) : '';
         
         // Build query based on actual database schema
         $baseQuery = "SELECT p.id, p.identificacion, p.nombres, p.apellidos, p.telefono, 
