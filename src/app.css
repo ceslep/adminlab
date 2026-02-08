@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* Definición de variables CSS personalizadas con alto contraste */
+:root {
+  /* Colores de fondo - oscuros con buen contraste */
+  --bg-slate-blue: #1e293b;
+  --bg-deep-dark-blue: #0f172a;
+  
+  /* Colores de texto - alta legibilidad */
+  --soft-white: #f8fafc;
+  --light-cyan: #e2e8f0;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  
+  /* Colores de acento - visibles y contrastados */
+  --dark-blue: #334155;
+  --cyan-blue: #06b6d4;
+  --electric-blue: #3b82f6;
+  --tech-purple: #8b5cf6;
+  
+  /* Efectos de brillo */
+  --glow-blue: #3b82f680;
+  --glow-purple: #8b5cf680;
+  
+  /* Estados */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+}
