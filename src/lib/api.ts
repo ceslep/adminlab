@@ -39,32 +39,7 @@ export async function login(credentials: { username: string; password: string })
  * @returns A promise that resolves with the patients API response
  */
 export async function getPacientes(search?: string, fecha?: string): Promise<ApiResponse<Paciente[]>> {
-    // Development mode - use mock JSON with complete schema
-    if (import.meta.env.DEV) {
-        try {
-            const response = await fetch('/api/pacientes_dev.json');
-            const data: ApiResponse<Paciente[]> = await response.json();
-            
-            // Apply client-side filtering for search
-            if (search && data.data) {
-                const searchLower = search.toLowerCase();
-                data.data = data.data.filter(paciente => 
-                    paciente.nombre_completo.toLowerCase().includes(searchLower) ||
-                    paciente.telefono.toLowerCase().includes(searchLower) ||
-                    paciente.email.toLowerCase().includes(searchLower) ||
-                    paciente.identificacion.toLowerCase().includes(searchLower)
-                );
-                data.total = data.data.length;
-            }
-            
-            return data;
-        } catch (error) {
-            console.error('Error fetching mock pacientes:', error);
-            return { success: false, message: 'Error al cargar datos de prueba.' };
-        }
-    }
-
-    // Production mode - use PHP API
+    // Always use production API
     const params = new URLSearchParams();
     if (search) params.append('search', search);
     if (fecha) params.append('fecha', fecha);
