@@ -1,32 +1,27 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
     import { fly } from 'svelte/transition';
-    // import { getPacientes } from '../api';
-    // import type { Paciente } from '../types';
 
     const dispatch = createEventDispatcher<{ logout: undefined }>();
 
     export let userName: string = 'Usuario';
 
     let showPatientsView = false;
-    // let pacientes: Paciente[] = [];
     let pacientes: any[] = [];
     let loading = false;
     let searchQuery = '';
-    let selectedDate = '2026-02-06'; // Fecha de desarrollo
+    let selectedDate = '2026-02-06';
 
     const dashboardCards = [
-        { title: 'Pacientes', description: 'Gestión de información de pacientes.', color: 'indigo' },
-        { title: 'Exámenes', description: 'Visualización y gestión de exámenes.', color: 'purple' },
-        { title: 'Reportes', description: 'Generación de informes.', color: 'green' }
+        { title: 'Pacientes', description: 'Gestión de información de pacientes.' },
+        { title: 'Exámenes', description: 'Visualización y gestión de exámenes.' },
+        { title: 'Reportes', description: 'Generación de informes.' }
     ];
 
     async function loadPacientes() {
-        console.log('loadPacientes() llamado con:', { searchQuery, selectedDate });
+        console.log('loadPacients() llamado');
         loading = true;
         try {
-            // Simulate API call for testing
-            console.log('Simulando llamada a API...');
             await new Promise(resolve => setTimeout(resolve, 1000));
             pacientes = [
                 { nombre_completo: 'Test Patient', telefono: '123456789' }
@@ -40,9 +35,8 @@
     }
 
     function handleShowPatients() {
-        console.log('Botón Gestionar Pacientes clickeado');
+        console.log('handleShowPatients llamado');
         showPatientsView = true;
-        console.log('Cargando pacientes...');
         loadPacientes();
     }
 
@@ -50,271 +44,86 @@
         showPatientsView = false;
     }
 
+    function testFunction() {
+        console.log('TEST FUNCTION - Svelte funciona!');
+        alert('Test Function ejecutada!');
+    }
+
     function handleLogout(): void {
         dispatch('logout');
-    }
-
-    function formatDate(dateString: string): string {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('es-ES', { 
-            day: '2-digit', 
-            month: '2-digit', 
-            year: 'numeric' 
-        });
-    }
-
-    function getInitials(nombre: string): string {
-        if (!nombre) return 'NA';
-        const names = nombre.trim().split(' ');
-        return names.map((n: string) => n.charAt(0).toUpperCase()).join('').substring(0, 2);
-    }
-
-    function formatAge(age: number): string {
-        if (!age) return 'N/A';
-        return `${age} años`;
-    }
-
-    function getGenderColor(genero: string): string {
-        return genero?.toLowerCase() === 'm' || genero?.toLowerCase() === 'masculino' ? 'text-blue-600' : 'text-pink-600';
     }
 </script>
 
 {#if !showPatientsView}
-    <div class="min-h-screen bg-gray-50 flex flex-col">
-        <!-- Header -->
-        <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-10 border-b">
-            <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
-                <h2 class="text-xl font-bold text-gray-900">Bienvenido, <span class="text-indigo-600 font-semibold">{userName}</span></h2>
-                <button
-                    on:click={handleLogout}
-                    class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
-                >
-                    Cerrar sesión
-                </button>
-            </div>
+    <div style="min-height: 100vh; background: #f9fafb; padding: 2rem;">
+        <header style="background: white; padding: 1rem; margin-bottom: 2rem; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <h2>Bienvenido, <span style="color: #4f46e5;">{userName}</span></h2>
+            <button on:click={handleLogout} style="background: #dc2626; color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.25rem; cursor: pointer;">Cerrar sesión</button>
         </header>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-8">
-            <div in:fly={{ y: 20, duration: 400, delay: 200 }} class="max-w-7xl mx-auto">
-                <h3 class="text-3xl font-bold text-gray-900 mb-2">Panel de Control</h3>
-                <p class="text-gray-600 mb-8">Aquí se mostrarán los datos y funcionalidades del laboratorio.</p>
-                <!-- Dashboard Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Dashboard Cards -->
-                    {#each dashboardCards as card, i}
-                        <div
-                            in:fly={{ y: 20, duration: 400, delay: 300 + (i * 100) }}
-                            class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-200"
-                        >
-                            <div class={`bg-${card.color}-100 w-12 h-12 rounded-xl flex items-center justify-center mb-4`}>
-                                <i class={`bi bi-${card.title === 'Pacientes' ? 'people' : 'person'} text-2xl text-${card.color}-600`}></i>
+        <main>
+            <h1 style="margin-bottom: 1rem;">Panel de Control</h1>
+            <p style="margin-bottom: 2rem;">Aquí se mostrarán los datos del laboratorio.</p>
+
+            <!-- Botón de prueba -->
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 0.5rem; margin-bottom: 2rem;">
+                <h3>🧪 Botón de Prueba</h3>
+                <button on:click={testFunction} style="background: #dc2626; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.25rem; cursor: pointer; font-weight: bold;">Click para probar Svelte</button>
+            </div>
+
+            <!-- Tarjetas -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                {#each dashboardCards as card}
+                    <div style="background: white; padding: 1.5rem; border-radius: 0.5rem; border: 1px solid #e5e7eb;">
+                        <h3 style="margin-bottom: 0.5rem;">{card.title}</h3>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">{card.description}</p>
+                        
+                        {#if card.title === 'Pacientes'}
+                            <div style="background: #f3f4f6; padding: 0.5rem; border-radius: 0.25rem; margin-bottom: 0.5rem; font-size: 0.875rem;">
+                                Debug: showPatientsView = {showPatientsView}
                             </div>
-                            <h4 class="font-bold text-lg text-gray-900 mb-2">{card.title}</h4>
-                            <p class="text-sm text-gray-600 mb-4">{card.description}</p>
-                            
-                            {#if card.title === 'Pacientes'}
-                                <button
-                                    on:click={() => {
-                                        console.log('Botón clickeado directamente');
-                                        handleShowPatients();
-                                    }}
-                                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105 flex items-center justify-center"
-                                >
-                                    <i class="bi bi-people-fill mr-2"></i>
-                                    Gestionar Pacientes
-                                </button>
-                            {:else}
-                                <button
-                                    disabled
-                                    class="w-full bg-gray-300 text-gray-500 px-4 py-2 rounded-lg font-medium cursor-not-allowed flex items-center justify-center"
-                                    title="Próximamente"
-                                >
-                                    <i class="bi bi-gear mr-2"></i>
-                                    Próximamente
-                                </button>
-                            {/if}
-                        </div>
-                    {/each}
-                </div>
+                            <button 
+                                on:click={handleShowPatients}
+                                style="background: #4f46e5; color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.25rem; cursor: pointer; width: 100%; font-size: 14px;"
+                            >
+                                👥 Gestionar Pacientes
+                            </button>
+                        {:else}
+                            <button disabled style="background: #d1d5db; color: #6b7280; padding: 0.5rem 1rem; border: none; border-radius: 0.25rem; cursor: not-allowed; width: 100%;">
+                                ⚙️ Próximamente
+                            </button>
+                        {/if}
+                    </div>
+                {/each}
             </div>
         </main>
     </div>
-{/if}
-
-{#if showPatientsView}
-    <div class="min-h-screen bg-gray-50 flex flex-col">
-        <!-- Header -->
-        <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-10 border-b">
-            <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
-                <div class="flex items-center space-x-4">
-                    <button
-                        on:click={handleBackToDashboard}
-                        class="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200"
-                    >
-                        <i class="bi bi-arrow-left text-xl mr-2"></i>
-                        <span class="font-semibold">Volver</span>
-                    </button>
-                    <h2 class="text-xl font-bold text-gray-900">Gestión de Pacientes</h2>
-                </div>
-                <button
-                    on:click={handleLogout}
-                    class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:scale-105 shadow-lg hover:shadow-xl"
-                >
-                    Cerrar sesión
-                </button>
+{:else}
+    <div style="min-height: 100vh; background: #f9fafb; padding: 2rem;">
+        <header style="background: white; padding: 1rem; margin-bottom: 2rem; border-radius: 0.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <button on:click={handleBackToDashboard} style="margin-right: 1rem; background: none; border: none; cursor: pointer; font-size: 1.2rem;">←</button>
+                <h2 style="display: inline;">Gestión de Pacientes</h2>
             </div>
+            <button on:click={handleLogout} style="background: #dc2626; color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.25rem; cursor: pointer;">Cerrar sesión</button>
         </header>
 
-        <!-- Main Content - Pacientes -->
-        <main class="flex-1 p-8">
-            <div in:fly={{ y: 20, duration: 400, delay: 200 }} class="max-w-7xl mx-auto">
-                <!-- Search and Filters -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
-                    <div class="flex flex-col md:flex-row gap-4 mb-6">
-                        <div class="flex-1">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Buscar pacientes</label>
-                            <div class="relative">
-                                <input
-                                    type="text"
-                                    bind:value={searchQuery}
-                                    placeholder="Buscar por identificación o nombre..."
-                                    class="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                                    on:keyup={loadPacientes}
-                                />
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                    <i class="bi bi-search"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Fecha</label>
-                            <input
-                                type="date"
-                                bind:value={selectedDate}
-                                class="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
-                                on:change={loadPacientes}
-                            />
-                        </div>
-                    </div>
-                    <div class="flex justify-between items-center text-sm text-gray-600">
-                        <span>Total: {pacientes.length} pacientes</span>
-                        <button
-                            on:click={loadPacientes}
-                            class="text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200"
-                        >
-                            <i class="bi bi-arrow-clockwise mr-1"></i>
-                            Actualizar
-                        </button>
-                    </div>
-                </div>
+        <main>
+            <h1>✅ Vista de Pacientes Funciona!</h1>
+            <p>showPatientsView: {showPatientsView}</p>
+            <p>Total pacientes: {pacientes.length}</p>
+            <p>✅ El botón de "Gestionar Pacientes" funciona correctamente.</p>
 
-                <!-- Loading State -->
-                {#if loading}
-                    <div class="flex justify-center items-center py-12">
-                        <div class="text-center">
-                            <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-r-2 border-indigo-600"></div>
-                            <p class="mt-4 text-gray-600">Cargando pacientes...</p>
-                        </div>
+            <div style="margin-top: 2rem;">
+                <h3>Pacientes cargados:</h3>
+                {#each pacientes as paciente}
+                    <div style="background: white; padding: 1rem; margin: 0.5rem 0; border-radius: 0.25rem; border: 1px solid #e5e7eb;">
+                        <strong>{paciente.nombre_completo}</strong> - {paciente.telefono}
                     </div>
-                {:else}
-                    <!-- Patients Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {#each pacientes as paciente, i}
-                            <div
-                                in:fly={{ y: 20, duration: 400, delay: 300 + (i * 50) }}
-                                class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-200 hover:border-indigo-400 p-6 cursor-pointer"
-                            >
-                                <!-- Patient Avatar -->
-                                <div class="flex items-center mb-4">
-                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                                        {getInitials(paciente.nombre_completo)}
-                                    </div>
-                                    <div class="ml-4">
-                                        <h4 class="font-semibold text-gray-900">{paciente.nombre_completo}</h4>
-                                        <div class="flex items-center space-x-4 text-sm text-gray-600">
-                                            <span class="flex items-center">
-                                                <i class="bi bi-telephone mr-1"></i>
-                                                {paciente.telefono || 'N/A'}
-                                            </span>
-                                            <span class="flex items-center">
-                                                <i class="bi bi-calendar3 mr-1"></i>
-                                                {paciente.edad ? formatAge(paciente.edad) : 'N/A'}
-                                            </span>
-                                             <span class="flex items-center">
-                                                 <i class="bi bi-geo-alt mr-1"></i>
-                                                 {paciente.estado || 'N/A'}
-                                             </span>
-                                        </div>
-                                        <div class="flex items-center mt-1">
-                                             <span class={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${paciente.color_genero}`}>
-                                                 <i class="bi bi-gender-{paciente.genero?.toLowerCase() === 'm' || paciente.genero?.toLowerCase() === 'masculino' ? 'male' : 'female'} mr-1"></i>
-                                                 {paciente.genero || 'N/A'}
-                                             </span>
-                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {paciente.color_estado} ml-2">
-                                                 <i class="bi bi-activity mr-1"></i>
-                                                 {paciente.estado}
-                                             </span>
-                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800 ml-2">
-                                                 <i class="bi bi-hospital mr-1"></i>
-                                                 {paciente.entidad || 'N/A'}
-                                             </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Contact Info -->
-                                <div class="grid grid-cols-1 gap-3 text-sm">
-                                     <div class="flex items-center text-gray-600">
-                                         <i class="bi bi-envelope mr-2 text-gray-400"></i>
-                                         <span>{paciente.email || 'N/A'}</span>
-                                     </div>
-                                     <div class="flex items-center text-gray-600">
-                                         <i class="bi bi-telephone mr-2 text-gray-400"></i>
-                                         <span>{paciente.telefono || 'N/A'}</span>
-                                     </div>
-                                     <div class="flex items-center text-gray-600">
-                                         <i class="bi bi-person-badge mr-2 text-gray-400"></i>
-                                         <span>{paciente.identificacion || 'N/A'}</span>
-                                     </div>
-                                     <div class="flex items-center text-gray-600">
-                                         <i class="bi bi-calendar-check mr-2 text-gray-400"></i>
-                                         <span>{formatDate(paciente.fecha_registro)}</span>
-                                     </div>
-                                     <div class="flex items-center text-gray-600">
-                                         <i class="bi bi-file-medical mr-2 text-gray-400"></i>
-                                         <span>{paciente.total_examenes || 0} exámenes</span>
-                                     </div>
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="flex space-x-2 mt-4 pt-4 border-t border-gray-100">
-                                    <button class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105">
-                                        <i class="bi bi-search mr-2"></i>
-                                        Ver Detalles
-                                    </button>
-                                    <button class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 hover:scale-105">
-                                        <i class="bi bi-file-medical mr-2"></i>
-                                        Exámenes
-                                    </button>
-                                </div>
-                            </div>
-                        {/each}
-                    </div>
-
-                    <!-- Empty State -->
-                    {#if pacientes.length === 0 && !loading}
-                        <div class="text-center py-12">
-                            <div class="text-gray-400 text-6xl mb-4">
-                                <i class="bi bi-people"></i>
-                            </div>
-                            <p class="text-gray-600 text-lg font-medium">No se encontraron pacientes</p>
-                            <p class="text-gray-500 mt-2">Intenta con otros criterios de búsqueda</p>
-                        </div>
-                    {/if}
-                {/if}
+                {/each}
             </div>
+
+            <button on:click={handleBackToDashboard} style="background: #6b7280; color: white; padding: 0.5rem 1rem; border: none; border-radius: 0.25rem; cursor: pointer; margin-top: 2rem;">Volver al Dashboard</button>
         </main>
     </div>
 {/if}
