@@ -1,6 +1,6 @@
 // src/lib/api.ts
 import { API_BASE_URL, LOGIN_ENDPOINT, PACIENTES_ENDPOINT } from './constants';
-import type { User, ApiResponse, Paciente } from './types'; // Import from types.ts
+import type { User, ApiResponse } from './types';
 
 /**
  * Handles user login.
@@ -9,7 +9,7 @@ import type { User, ApiResponse, Paciente } from './types'; // Import from types
  */
 export async function login(credentials: { username: string; password: string }): Promise<ApiResponse<User>> {
     const formData = new FormData();
-    formData.append('usuario', credentials.username); // Cambiado a 'usuario' para coincidir con PHP
+    formData.append('usuario', credentials.username);
     formData.append('password', credentials.password);
     formData.append('login', '1'); // Mimic original PHP form submission
 
@@ -20,7 +20,6 @@ export async function login(credentials: { username: string; password: string })
         });
 
         if (!response.ok) {
-            // Handle HTTP errors (e.g., 404, 500)
             return { success: false, message: `HTTP error! status: ${response.status}` };
         }
 
@@ -38,7 +37,7 @@ export async function login(credentials: { username: string; password: string })
  * @param fecha Optional date for filtering
  * @returns A promise that resolves with the patients API response
  */
-export async function getPacientes(search?: string, fecha?: string): Promise<ApiResponse<Paciente[]>> {
+export async function getPacientes(search?: string, fecha?: string): Promise<ApiResponse<any[]>> {
     // Always use production API with POST method
     const formData = new FormData();
     if (search) formData.append('search', search);
@@ -57,7 +56,7 @@ export async function getPacientes(search?: string, fecha?: string): Promise<Api
             return { success: false, message: `HTTP error! status: ${response.status}` };
         }
 
-        const data: ApiResponse<Paciente[]> = await response.json();
+        const data = await response.json();
         return data;
     } catch (error) {
         console.error('Error fetching pacientes:', error);

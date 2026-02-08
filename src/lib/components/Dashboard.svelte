@@ -98,8 +98,18 @@
     }
 
     function handleLogout(): void {
-        console.log('handleLogout() llamado');
-        dispatch('logout');
+        console.log('🔴 handleLogout() llamado');
+        console.log('dispatch function:', typeof dispatch);
+        console.log('userAgent:', navigator.userAgent);
+        
+        // Debugging del evento
+        try {
+            console.log('Intentando dispatch("logout")...');
+            dispatch('logout');
+            console.log('dispatch("logout") ejecutado');
+        } catch (error) {
+            console.error('Error en dispatch:', error);
+        }
     }
 
     function handleSearch() {

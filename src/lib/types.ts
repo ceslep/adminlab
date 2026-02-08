@@ -5,7 +5,6 @@ export interface User {
     nombre: string;
     usuario: string;
     lab_id: string;
-    // Add other user properties as needed
 }
 
 // Define the Paciente interface
@@ -40,5 +39,4 @@ export interface ApiResponse<T> {
     data?: T; // Generic data array, will be Paciente[] for pacientes
     total?: number; // Total count for array responses
     fecha_consulta?: string; // For pacientes response
-    // Add other common response fields here
 }
