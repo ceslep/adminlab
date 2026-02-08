@@ -13,24 +13,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $search = isset($_POST['search']) ? trim($_POST['search']) : '';
         $fecha = isset($_POST['fecha']) ? trim($_POST['fecha']) : '';
         
-        // Build query based on actual database schema
-        $baseQuery = "SELECT p.id, p.identificacion, p.nombres, p.apellidos, p.telefono, 
-                             p.correo, p.genero, p.fecnac, p.estado, p.entidad,
-                             GROUP_CONCAT(DISTINCT e.codexamen) as examenes
-                      FROM paciente p
-                      LEFT JOIN examenes e ON p.identificacion = e.identificacion
-                      WHERE 1=1";
+    // Build query based on actual database schema
+    $baseQuery = "SELECT p.id, p.identificacion, p.nombres, p.apellidos, p.telefono, 
+                         p.correo, p.genero, p.fecnac, p.estado, p.entidad,
+                         COUNT(e.codexamen) as total_examenes
+                  FROM paciente p
+                  LEFT JOIN examenes e ON p.identificacion = e.identificacion
+                  WHERE 1=1";
         
         $params = [];
         $types = '';
         
         // Add search filter - matching actual field names
-        if (!empty($search)) {
-            $baseQuery .= " AND (p.nombres LIKE ? OR p.apellidos LIKE ? OR p.telefono LIKE ? OR p.correo LIKE ? OR p.identificacion LIKE ?)";
-            $searchParam = "%$search%";
-            $params = array_merge($params, [$searchParam, $searchParam, $searchParam, $searchParam, $searchParam]);
-            $types .= str_repeat('s', 5);
-        }
+    if (!empty($search)) {
+        $baseQuery .= " AND (p.nombres LIKE ? OR p.apellidos LIKE ? OR p.telefono LIKE ? OR p.correo LIKE ? OR p.identificacion LIKE ?)";
+        $searchParam = "%$search%";
+        $params = array_merge($params, [$searchParam, $searchParam, $searchParam, $searchParam]);
+        $types .= str_repeat('s', 5);
+    }
         
         // Group and order
         $baseQuery .= " GROUP BY p.id ORDER BY p.apellidos, p.nombres";
