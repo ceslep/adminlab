@@ -1,6 +1,12 @@
 // src/lib/constants.ts
 
-export const API_BASE_URL: string = 'https://mycar.iedeoccidente.com/api';
+// Detect development mode
+const isDevelopment = import.meta.env.DEV;
+
+export const API_BASE_URL: string = isDevelopment 
+    ? 'http://localhost:5175/adminlab/api'  // Local development
+    : 'https://mycar.iedeoccidente.com/api'; // Production
+
 export const LOGIN_ENDPOINT: string = '/login.php';
 export const LOGO_URL: string = 'https://mycar.iedeoccidente.com/printphp/logo.png';
 

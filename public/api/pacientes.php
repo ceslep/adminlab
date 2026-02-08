@@ -8,14 +8,105 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
-require_once '../config.php';
+// Try to load config, but provide fallback for local development
+try {
+    require_once '../config.php';
+    $development_mode = false;
+} catch (Exception $e) {
+    $development_mode = true;
+}
 
 try {
     // Get query parameters
     $search = isset($_GET['search']) ? trim($_GET['search']) : '';
     $fecha = isset($_GET['fecha']) ? trim($_GET['fecha']) : '';
     
-    // Build base query
+    // Development mode - return sample data
+    if ($development_mode) {
+        $pacientes = [
+            [
+                'id_paciente' => 1,
+                'nombre' => 'Juan',
+                'apellido' => 'Pérez',
+                'nombre_completo' => 'Juan Pérez',
+                'telefono' => '3001234567',
+                'email' => 'juan.perez@email.com',
+                'genero' => 'M',
+                'genero_completo' => 'Masculino',
+                'color_genero' => 'bg-blue-100 text-blue-700',
+                'fecha_nacimiento' => '1985-05-15',
+                'edad' => 40,
+                'edad_texto' => '40 años',
+                'estado' => 'Activo',
+                'color_estado' => 'bg-green-100 text-green-700',
+                'usuario_registro' => 'admin',
+                'fecha_registro' => '2024-01-15',
+                'examenes' => ['Sangre', 'Orina'],
+                'total_examenes' => 2
+            ],
+            [
+                'id_paciente' => 2,
+                'nombre' => 'María',
+                'apellido' => 'González',
+                'nombre_completo' => 'María González',
+                'telefono' => '3009876543',
+                'email' => 'maria.gonzalez@email.com',
+                'genero' => 'F',
+                'genero_completo' => 'Femenino',
+                'color_genero' => 'bg-pink-100 text-pink-700',
+                'fecha_nacimiento' => '1992-08-22',
+                'edad' => 33,
+                'edad_texto' => '33 años',
+                'estado' => 'Activo',
+                'color_estado' => 'bg-green-100 text-green-700',
+                'usuario_registro' => 'admin',
+                'fecha_registro' => '2024-02-20',
+                'examenes' => ['Radiografía'],
+                'total_examenes' => 1
+            ],
+            [
+                'id_paciente' => 3,
+                'nombre' => 'Carlos',
+                'apellido' => 'Rodríguez',
+                'nombre_completo' => 'Carlos Rodríguez',
+                'telefono' => '3012345678',
+                'email' => 'carlos.rodriguez@email.com',
+                'genero' => 'M',
+                'genero_completo' => 'Masculino',
+                'color_genero' => 'bg-blue-100 text-blue-700',
+                'fecha_nacimiento' => '1978-12-10',
+                'edad' => 47,
+                'edad_texto' => '47 años',
+                'estado' => 'Inactivo',
+                'color_estado' => 'bg-red-100 text-red-700',
+                'usuario_registro' => 'admin',
+                'fecha_registro' => '2023-11-05',
+                'examenes' => ['Sangre', 'Orina', 'ECG'],
+                'total_examenes' => 3
+            ]
+        ];
+        
+        // Apply search filter if provided
+        if (!empty($search)) {
+            $search_lower = strtolower($search);
+            $pacientes = array_filter($pacientes, function($paciente) use ($search_lower) {
+                return strpos(strtolower($paciente['nombre_completo']), $search_lower) !== false ||
+                       strpos(strtolower($paciente['telefono']), $search_lower) !== false ||
+                       strpos(strtolower($paciente['email']), $search_lower) !== false;
+            });
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'data' => array_values($pacientes),
+            'total' => count($pacientes),
+            'fecha_consulta' => $fecha ?: '2026-02-06',
+            'mode' => 'development'
+        ], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    
+    // Production mode - Build base query
     $baseQuery = "SELECT p.id_paciente, p.nombre_paciente, p.apellido_paciente, 
                          p.telefono_paciente, p.email_paciente, p.sexo_paciente, 
                          p.fecha_nacimiento, p.estado_paciente, p.usuario_registro, 
