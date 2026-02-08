@@ -1,6 +1,6 @@
 // src/lib/api.ts
-import { API_BASE_URL, LOGIN_ENDPOINT } from './constants';
-import type { User, ApiResponse } from './types'; // Import from types.ts
+import { API_BASE_URL, LOGIN_ENDPOINT, PACIENTES_ENDPOINT } from './constants';
+import type { User, ApiResponse, Paciente } from './types'; // Import from types.ts
 
 /**
  * Handles user login.
@@ -32,10 +32,33 @@ export async function login(credentials: { username: string; password: string })
     }
 }
 
-// You can add other API call functions here as needed,
-// for example:
-/*
-export async function getMetrics(period: string, mode: string): Promise<ApiResponse<MetricsData>> {
-    // ... implementation for metrics endpoint
+/**
+ * Fetches patients data with optional search and date filtering.
+ * @param search Optional search term to filter patients
+ * @param fecha Optional date for filtering
+ * @returns A promise that resolves with the patients API response
+ */
+export async function getPacientes(search?: string, fecha?: string): Promise<ApiResponse<Paciente[]>> {
+    const params = new URLSearchParams();
+    if (search) params.append('search', search);
+    if (fecha) params.append('fecha', fecha);
+
+    try {
+        const response = await fetch(`${API_BASE_URL}${PACIENTES_ENDPOINT}?${params.toString()}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            return { success: false, message: `HTTP error! status: ${response.status}` };
+        }
+
+        const data: ApiResponse<Paciente[]> = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching pacientes:', error);
+        return { success: false, message: 'Error de conexión al obtener pacientes.' };
+    }
 }
-*/
