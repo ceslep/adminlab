@@ -1,5 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import { getPacientes } from '../api';
+    import type { Paciente } from '../types';
     
     const dispatch = createEventDispatcher<{ logout: undefined }>();
 
@@ -56,16 +58,32 @@
     ];
 
     // Funciones
-    function loadPacientes() {
-        console.log('loadPacientes() llamado');
+    async function loadPacientes() {
+        console.log('loadPacientes() llamado con parámetros:', { searchQuery, selectedDate });
         loading = true;
         
-        // Simular llamada API
-        setTimeout(() => {
+        try {
+            console.log('Llamando a API getPacientes...');
+            const response = await getPacientes(searchQuery, selectedDate);
+            console.log('Respuesta de la API:', response);
+            
+            if (response.success && response.data) {
+                pacientes = response.data;
+                console.log('Pacientes cargados desde API:', pacientes.length);
+            } else {
+                console.log('Error en respuesta de API:', response.message);
+                // En caso de error, usar datos de prueba
+                pacientes = mockPacientes;
+                console.log('Usando datos de prueba como fallback');
+            }
+        } catch (error) {
+            console.error('Error llamando a la API:', error);
+            // En caso de error crítico, usar datos de prueba
             pacientes = mockPacientes;
+            console.log('Usando datos de prueba como fallback de error');
+        } finally {
             loading = false;
-            console.log('Pacientes cargados:', pacientes.length);
-        }, 1000);
+        }
     }
 
     function handleShowPatients() {
