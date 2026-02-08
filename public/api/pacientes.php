@@ -13,22 +13,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $search = isset($_POST['search']) ? trim($_POST['search']) : '';
         $fecha = isset($_POST['fecha']) ? trim($_POST['fecha']) : '';
         
-    // Build query based on actual database schema
-    $baseQuery = "SELECT p.id, p.identificacion, p.nombres, p.apellidos, p.telefono, 
-                         p.correo, p.genero, p.fecnac, p.estado, p.entidad,
-                         COUNT(e.codexamen) as total_examenes
-                  FROM paciente p
-                  LEFT JOIN examenes e ON p.identificacion = e.identificacion
-                  WHERE 1=1";
+        // Validate that fecha is required
+        if (empty($fecha)) {
+            $response = ['success' => false, 'message' => 'El parámetro fecha es obligatorio.'];
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            exit;
+        }
         
-        $params = [];
-        $types = '';
+    // Primero obtener pacientes con sus exámenes para la fecha
+    $baseQuery = "SELECT DISTINCT p.id, p.identificacion, p.nombres, p.apellidos, p.telefono, 
+                         p.correo, p.genero, p.fecnac, p.estado, p.entidad,
+                         GROUP_CONCAT(DISTINCT e.codexamen ORDER BY e.codexamen) as examenes_codigos
+                   FROM paciente p
+                   INNER JOIN examenes e ON p.identificacion = e.identificacion
+                   WHERE e.fecha = ?";
+        
+        $params = [$fecha];
+        $types = 's';
         
         // Add search filter - matching actual field names
     if (!empty($search)) {
         $baseQuery .= " AND (p.nombres LIKE ? OR p.apellidos LIKE ? OR p.telefono LIKE ? OR p.correo LIKE ? OR p.identificacion LIKE ?)";
         $searchParam = "%$search%";
-        $params = array_merge($params, [$searchParam, $searchParam, $searchParam, $searchParam]);
+        $params = array_merge($params, [$searchParam, $searchParam, $searchParam, $searchParam, $searchParam]);
         $types .= str_repeat('s', 5);
     }
         
@@ -43,6 +50,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $stmt->execute();
             $result = $stmt->get_result();
+            
+            // Preparar cache de procedimientos para optimizar consultas
+            $procedimientos_cache = [];
+            $check_table = $mysqli->query("SHOW TABLES LIKE 'procedimientos'");
+            if ($check_table->num_rows > 0) {
+                $result_proc = $mysqli->query("SELECT codigo, nombre, abreviatura FROM procedimientos");
+                while ($proc = $result_proc->fetch_assoc()) {
+                    $procedimientos_cache[$proc['codigo']] = !empty($proc['abreviatura']) 
+                        ? $proc['abreviatura'] 
+                        : $proc['nombre'];
+                }
+            }
             
             // Prepare patients array
             $pacientes = [];
@@ -64,10 +83,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $color_genero = 'bg-pink-100 text-pink-700';
                 }
                 
-                // Process exams (codexamen contains exam codes)
+                // Process exams - obtener nombres usando cache de procedimientos
                 $examenes = [];
-                if ($row['examenes']) {
-                    $examenes = explode(',', $row['examenes']);
+                $examenes_detalle = [];
+                
+                if (!empty($row['examenes_codigos'])) {
+                    $examenes_codigos_array = explode(',', $row['examenes_codigos']);
+                    
+                    // Obtener nombres de exámenes usando el cache de procedimientos
+                    foreach ($examenes_codigos_array as $codigo_examen) {
+                        $codigo_examen = trim($codigo_examen);
+                        if (!empty($codigo_examen)) {
+                            // Buscar en cache de procedimientos
+                            if (isset($procedimientos_cache[$codigo_examen])) {
+                                $examenes_detalle[] = $procedimientos_cache[$codigo_examen];
+                            } else {
+                                // Fallback basado en códigos comunes
+                                switch ($codigo_examen) {
+                                    case '1':
+                                        $examenes_detalle[] = 'Hemograma';
+                                        break;
+                                    case '2':
+                                        $examenes_detalle[] = 'Orina';
+                                        break;
+                                    case '3':
+                                        $examenes_detalle[] = 'Coprológico';
+                                        break;
+                                    case '4':
+                                        $examenes_detalle[] = 'Química Sanguínea';
+                                        break;
+                                    case '5':
+                                        $examenes_detalle[] = 'Hemocultivo';
+                                        break;
+                                    case '6':
+                                        $examenes_detalle[] = 'Urocultivo';
+                                        break;
+                                    case '7':
+                                        $examenes_detalle[] = 'Perfil Lipídico';
+                                        break;
+                                    case '8':
+                                        $examenes_detalle[] = 'Glicemia';
+                                        break;
+                                    default:
+                                        $examenes_detalle[] = "Examen " . $codigo_examen;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    
+                    $examenes = $examenes_detalle;
                 }
                 
                 // Determine status color
@@ -102,6 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'usuario_registro' => 'Sistema',
                     'fecha_registro' => $row['fecnac'],
                     'examenes' => $examenes,
+                    'examenes_codigos' => explode(',', $row['examenes_codigos'] ?? ''),
                     'total_examenes' => count($examenes)
                 ];
                 
@@ -111,11 +177,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->close();
             
             // Success response
+            $total_examenes_count = array_sum(array_column($pacientes, 'total_examenes'));
             $response = [
                 'success' => true,
                 'data' => $pacientes,
                 'total' => count($pacientes),
-                'fecha_consulta' => $fecha ?: date('Y-m-d')
+                'total_examenes' => $total_examenes_count,
+                'fecha_filtro' => $fecha,
+                'fecha_consulta' => $fecha,
+                'message' => "Pacientes con exámenes en fecha: $fecha" . (!empty($search) ? " (filtrado por: $search)" : ""),
+                'examenes_disponibles' => !empty($procedimientos_cache) ? count($procedimientos_cache) : 0
             ];
             
         } else {

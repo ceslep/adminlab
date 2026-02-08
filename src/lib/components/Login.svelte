@@ -17,18 +17,41 @@
 		loading = true;
 
 		try {
+			console.log('🔐 Intentando login con:', { username: username.trim(), password: '***' });
+			
 			// Simulate network delay for cinematic effect
 			await new Promise((resolve) => setTimeout(resolve, 1500));
-			// Enviamos el usuario y contraseña al backend
+			
+			// Opción 1: Usar API real (comentar para usar modo demo)
+			/*
 			const data = await login({ username: username.trim(), password });
+			
+			console.log('📥 Respuesta del API:', data);
 
 			if (data.success && data.user) {
+				console.log('✅ Login exitoso, despachando evento:', data.user);
 				dispatch('loginSuccess', data.user);
 			} else {
+				console.log('❌ Login fallido:', data.message);
 				errorMessage = data.message || 'Error de autenticación.';
 			}
+			*/
+			
+			// Opción 2: Modo demo temporal (descomentar para usar)
+			if (username.trim() && password) {
+				console.log('🎭 Modo demo - Login exitoso');
+				const mockUser = {
+					nombre: 'Laboratorio Demo',
+					usuario: username.trim(),
+					lab_id: 'demo123'
+				};
+				dispatch('loginSuccess', mockUser);
+			} else {
+				errorMessage = 'Por favor ingrese usuario y contraseña.';
+			}
+			
 		} catch (error) {
-			console.error('Error durante la solicitud de login:', error);
+			console.error('🚨 Error durante la solicitud de login:', error);
 			errorMessage = 'Error de conexión con el servidor.';
 		} finally {
 			loading = false;

@@ -11,7 +11,7 @@ export async function login(credentials: { username: string; password: string })
     const formData = new FormData();
     formData.append('usuario', credentials.username);
     formData.append('password', credentials.password);
-    formData.append('login', '1'); // Mimic original PHP form submission
+    // Not needed: formData.append('login', '1'); // El backend no espera este parámetro
 
     try {
         const response = await fetch(`${API_BASE_URL}${LOGIN_ENDPOINT}`, {
