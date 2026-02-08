@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico - Dashboard</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5;">
+    
+    <h1>🔍 Diagnóstico del Sistema</h1>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2>Test 1: JavaScript Básico</h2>
+        <button onclick="alert('JavaScript funciona!')" style="background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            Click JavaScript Puro
+        </button>
+    </div>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2>Test 2: Console Debug</h2>
+        <button onclick="console.log('Botón presionado'); this.style.background = '#28a745';" style="background: #ffc107; color: black; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            Click con Console
+        </button>
+    </div>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2>Test 3: Event Listeners</h2>
+        <button id="test-btn-3" style="background: #6f42c1; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            Click con Event Listener
+        </button>
+    </div>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2>Test 4: Input Test</h2>
+        <input type="text" id="test-input" placeholder="Escribe algo aquí" style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 200px;">
+        <button onclick="document.getElementById('test-input').value = 'Funciona!'" style="background: #17a2b8; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin-left: 10px;">
+            Test Input
+        </button>
+    </div>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; margin: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <h2>📊 Estado del Sistema</h2>
+        <div id="status" style="background: #e9ecef; padding: 10px; border-radius: 4px; font-family: monospace;">
+            <p>Navegador: <span id="browser"></span></p>
+            <p>URL: <span id="url"></span></p>
+            <p>Viewport: <span id="viewport"></span></p>
+            <p>Timestamp: <span id="timestamp"></span></p>
+            <p>Console Errors: <span id="console-errors">Verificar consola</span></p>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar información del sistema
+        document.getElementById('browser').textContent = navigator.userAgent;
+        document.getElementById('url').textContent = window.location.href;
+        document.getElementById('viewport').textContent = window.innerWidth + 'x' + window.innerHeight;
+        document.getElementById('timestamp').textContent = new Date().toISOString();
+        
+        // Test 3: Event listener
+        document.getElementById('test-btn-3').addEventListener('click', function() {
+            console.log('Event listener funcionando!');
+            this.style.background = '#dc3545';
+            alert('Event listener funciona!');
+        });
+        
+        // Capturar errores de consola
+        const originalLog = console.error;
+        console.error = function(...args) {
+            originalLog.apply(console, args);
+            document.getElementById('console-errors').textContent = 'Error detectado - ver consola';
+            document.getElementById('console-errors').style.color = 'red';
+        };
+        
+        console.log('Diagnóstico inicializado correctamente');
+        console.log('Si puedes ver esto, JavaScript básico funciona');
+    </script>
+</body>
+</html>
