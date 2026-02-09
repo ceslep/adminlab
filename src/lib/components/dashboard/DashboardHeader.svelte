@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { fade, slide } from 'svelte/transition';
+    import { cubicOut } from 'svelte/easing';
     import Button from './shared/Button.svelte';
     
     export let title: string = '';
@@ -9,57 +11,67 @@
     export let userName: string | undefined = undefined;
 </script>
 
-<header class="dashboard-header">
+<header 
+    in:slide={{ duration: 400, easing: cubicOut }}
+    class="dashboard-header"
+>
     <div class="header-content">
         <div class="header-left">
             {#if showBackButton}
-                <Button 
-                    variant="secondary" 
-                    size="sm" 
-                    icon="←"
-                    onClick={onBack}
-                >
-                    Volver
-                </Button>
+                <div in:fade={{ duration: 300, delay: 100 }}>
+                    <Button 
+                        variant="secondary" 
+                        size="sm" 
+                        icon="←"
+                        onClick={onBack}
+                    >
+                        Volver
+                    </Button>
+                </div>
             {/if}
-            <div class="header-title">
-                <h1>{title}</h1>
-                {#if subtitle}
-                    <p class="subtitle">{subtitle}</p>
-                {/if}
-                {#if userName && !showBackButton}
-                    <p class="subtitle">
-                        Bienvenido, <span class="user-name">{userName}</span>
-                    </p>
-                {/if}
+            <div in:fade={{ duration: 300, delay: 200 }}>
+                <div class="header-title">
+                    <h1>{title}</h1>
+                    {#if subtitle}
+                        <p class="subtitle">{subtitle}</p>
+                    {/if}
+                    {#if userName && !showBackButton}
+                        <p class="subtitle">
+                            Bienvenido, <span class="user-name">{userName}</span>
+                        </p>
+                    {/if}
+                </div>
             </div>
         </div>
         <div class="header-right">
-            <Button 
-                variant="secondary" 
-                size="sm" 
-                onClick={onLogout}
-            >
-                Cerrar sesión
-            </Button>
+            <div in:fade={{ duration: 300, delay: 300 }}>
+                <Button 
+                    variant="secondary" 
+                    size="sm" 
+                    onClick={onLogout}
+                >
+                    Cerrar sesión
+                </Button>
+            </div>
         </div>
     </div>
 </header>
 
 <style>
     .dashboard-header {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(16px);
-        border-bottom: 1px solid #e2e8f0;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(226, 232, 240, 0.6);
         position: sticky;
         top: 0;
-        z-index: 10;
+        z-index: 50;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
     
     .header-content {
-        max-width: 1200px;
+        max-width: 1400px;
         margin: 0 auto;
-        padding: 1rem 2rem;
+        padding: 1.25rem 2rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -68,7 +80,7 @@
     .header-left {
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 1.25rem;
     }
     
     .header-right {
@@ -79,35 +91,41 @@
     
     .header-title h1 {
         margin: 0;
-        font-size: 1.5rem;
-        color: #1f2937;
-        font-weight: 600;
+        font-size: 1.75rem;
+        color: #1e293b;
+        font-weight: 700;
+        line-height: 1.2;
     }
     
     .subtitle {
-        margin: 0.25rem 0 0 0;
-        color: #6b7280;
+        margin: 0.375rem 0 0 0;
+        color: #64748b;
         font-size: 0.875rem;
+        font-weight: 500;
     }
     
     .user-name {
-        color: #3b82f6;
-        font-weight: 600;
+        color: #4f46e5;
+        font-weight: 700;
     }
     
     @media (max-width: 768px) {
         .header-content {
-            padding: 1rem;
+            padding: 1rem 1.25rem;
         }
         
         .header-left {
             flex-direction: column;
             align-items: flex-start;
-            gap: 0.5rem;
+            gap: 0.75rem;
         }
         
         .header-title h1 {
-            font-size: 1.25rem;
+            font-size: 1.375rem;
+        }
+        
+        .subtitle {
+            font-size: 0.8125rem;
         }
     }
 </style>

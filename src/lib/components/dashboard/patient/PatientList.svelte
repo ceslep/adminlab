@@ -66,7 +66,8 @@ export let pacientes: any[] = [];
 
 <style>
     .patient-list {
-        min-height: 400px;
+        min-height: 500px;
+        position: relative;
     }
     
     .loading-container {
@@ -78,10 +79,11 @@ export let pacientes: any[] = [];
     
     .patients-grid {
         display: grid;
-        gap: 1.5rem;
+        gap: 2rem;
+        grid-template-columns: 1fr;
     }
     
-    @media (min-width: 768px) {
+    @media (min-width: 640px) {
         .patients-grid {
             grid-template-columns: repeat(2, 1fr);
         }
@@ -90,11 +92,52 @@ export let pacientes: any[] = [];
     @media (min-width: 1024px) {
         .patients-grid {
             grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+    }
+    
+    @media (min-width: 1280px) {
+        .patients-grid {
+            grid-template-columns: repeat(4, 1fr);
         }
     }
     
     .empty-container {
         display: flex;
         justify-content: center;
+        align-items: center;
+        min-height: 400px;
+    }
+
+    /* Bento-style grid for patient cards */
+    .patients-grid :global(.patient-card:nth-child(3n+1)) {
+        grid-column: span 1;
+    }
+
+    .patients-grid :global(.patient-card:nth-child(3n+2)) {
+        grid-column: span 1;
+    }
+
+    .patients-grid :global(.patient-card:nth-child(3n+3)) {
+        grid-column: span 1;
+    }
+
+    /* Large screens - create varied card sizes */
+    @media (min-width: 1536px) {
+        .patients-grid :global(.patient-card:nth-child(4n+1)) {
+            grid-row: span 1;
+        }
+        
+        .patients-grid :global(.patient-card:nth-child(4n+2)) {
+            grid-row: span 1;
+        }
+        
+        .patients-grid :global(.patient-card:nth-child(4n+3)) {
+            grid-row: span 1;
+        }
+        
+        .patients-grid :global(.patient-card:nth-child(4n+4)) {
+            grid-row: span 1;
+        }
     }
 </style>

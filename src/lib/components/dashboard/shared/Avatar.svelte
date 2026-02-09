@@ -12,8 +12,8 @@
     
     const sizeClasses = {
         sm: 'w-8 h-8 text-sm',
-        md: 'w-12 h-12 text-lg',
-        lg: 'w-16 h-16 text-xl'
+        md: 'w-10 h-10 text-base',
+        lg: 'w-12 h-12 text-lg'
     };
     
     const finalSizeClass = customSize || sizeClasses[size];
@@ -21,16 +21,18 @@
 
 <div 
     class="avatar {finalSizeClass}" 
-    style="background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; border-radius: 50%;">
+    style="background: linear-gradient(135deg, #6366f1, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; border-radius: 50%; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
     {initials}
 </div>
 
 <style>
     .avatar {
-        transition: transform 0.2s;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(255, 255, 255, 0.8);
     }
     
     .avatar:hover {
-        transform: scale(1.05);
+        transform: scale(1.1);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     }
 </style>

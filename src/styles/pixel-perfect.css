@@ -1,0 +1,307 @@
+/* Pixel Perfect Design System for AdminLab */
+
+:root {
+  /* Base Scale - 4px System */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Typography Scale - Perfect Line Heights */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 36px;
+  --text-5xl: 48px;
+
+  /* Border Radius - Perfectly Aligned */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-3xl: 32px;
+  --radius-full: 9999px;
+
+  /* Shadow System - Pixel Perfect */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+  /* Component Heights - Pixel Perfect */
+  --height-xs: 32px;
+  --height-sm: 40px;
+  --height-md: 48px;
+  --height-lg: 56px;
+  --height-xl: 64px;
+
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+}
+
+/* Pixel Perfect Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Perfect Grid System */
+.pixel-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.pixel-grid-gap-2 { gap: var(--space-2); }
+.pixel-grid-gap-3 { gap: var(--space-3); }
+.pixel-grid-gap-4 { gap: var(--space-4); }
+.pixel-grid-gap-6 { gap: var(--space-6); }
+.pixel-grid-gap-8 { gap: var(--space-8); }
+
+/* Perfect Flexbox */
+.pixel-flex {
+  display: flex;
+}
+
+.pixel-flex-col {
+  flex-direction: column;
+}
+
+.pixel-flex-center {
+  align-items: center;
+  justify-content: center;
+}
+
+.pixel-flex-between {
+  justify-content: space-between;
+}
+
+.pixel-flex-align-center {
+  align-items: center;
+}
+
+/* Pixel Perfect Spacing */
+.pixel-p-1 { padding: var(--space-1); }
+.pixel-p-2 { padding: var(--space-2); }
+.pixel-p-3 { padding: var(--space-3); }
+.pixel-p-4 { padding: var(--space-4); }
+.pixel-p-5 { padding: var(--space-5); }
+.pixel-p-6 { padding: var(--space-6); }
+.pixel-p-8 { padding: var(--space-8); }
+
+.pixel-py-2 { padding-top: var(--space-2); padding-bottom: var(--space-2); }
+.pixel-py-3 { padding-top: var(--space-3); padding-bottom: var(--space-3); }
+.pixel-py-4 { padding-top: var(--space-4); padding-bottom: var(--space-4); }
+.pixel-py-5 { padding-top: var(--space-5); padding-bottom: var(--space-5); }
+.pixel-py-6 { padding-top: var(--space-6); padding-bottom: var(--space-6); }
+
+.pixel-px-2 { padding-left: var(--space-2); padding-right: var(--space-2); }
+.pixel-px-3 { padding-left: var(--space-3); padding-right: var(--space-3); }
+.pixel-px-4 { padding-left: var(--space-4); padding-right: var(--space-4); }
+.pixel-px-5 { padding-left: var(--space-5); padding-right: var(--space-5); }
+.pixel-px-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
+
+.pixel-m-1 { margin: var(--space-1); }
+.pixel-m-2 { margin: var(--space-2); }
+.pixel-m-3 { margin: var(--space-3); }
+.pixel-m-4 { margin: var(--space-4); }
+.pixel-m-5 { margin: var(--space-5); }
+.pixel-m-6 { margin: var(--space-6); }
+.pixel-m-8 { margin: var(--space-8); }
+
+.pixel-my-2 { margin-top: var(--space-2); margin-bottom: var(--space-2); }
+.pixel-my-3 { margin-top: var(--space-3); margin-bottom: var(--space-3); }
+.pixel-my-4 { margin-top: var(--space-4); margin-bottom: var(--space-4); }
+.pixel-my-5 { margin-top: var(--space-5); margin-bottom: var(--space-5); }
+.pixel-my-6 { margin-top: var(--space-6); margin-bottom: var(--space-6); }
+
+.pixel-mx-2 { margin-left: var(--space-2); margin-right: var(--space-2); }
+.pixel-mx-3 { margin-left: var(--space-3); margin-right: var(--space-3); }
+.pixel-mx-4 { margin-left: var(--space-4); margin-right: var(--space-4); }
+.pixel-mx-5 { margin-left: var(--space-5); margin-right: var(--space-5); }
+.pixel-mx-6 { margin-left: var(--space-6); margin-right: var(--space-6); }
+
+/* Pixel Perfect Typography */
+.pixel-text-xs { font-size: var(--text-xs); line-height: 16px; }
+.pixel-text-sm { font-size: var(--text-sm); line-height: 20px; }
+.pixel-text-base { font-size: var(--text-base); line-height: 24px; }
+.pixel-text-lg { font-size: var(--text-lg); line-height: 28px; }
+.pixel-text-xl { font-size: var(--text-xl); line-height: 32px; }
+.pixel-text-2xl { font-size: var(--text-2xl); line-height: 36px; }
+.pixel-text-3xl { font-size: var(--text-3xl); line-height: 40px; }
+.pixel-text-4xl { font-size: var(--text-4xl); line-height: 44px; }
+.pixel-text-5xl { font-size: var(--text-5xl); line-height: 56px; }
+
+/* Pixel Perfect Heights */
+.pixel-h-xs { height: var(--height-xs); }
+.pixel-h-sm { height: var(--height-sm); }
+.pixel-h-md { height: var(--height-md); }
+.pixel-h-lg { height: var(--height-lg); }
+.pixel-h-xl { height: var(--height-xl); }
+
+/* Pixel Perfect Widths */
+.pixel-w-xs { width: var(--height-xs); }
+.pixel-w-sm { width: var(--height-sm); }
+.pixel-w-md { width: var(--height-md); }
+.pixel-w-lg { width: var(--height-lg); }
+.pixel-w-xl { width: var(--height-xl); }
+
+/* Pixel Perfect Border Radius */
+.pixel-rounded-sm { border-radius: var(--radius-sm); }
+.pixel-rounded-md { border-radius: var(--radius-md); }
+.pixel-rounded-lg { border-radius: var(--radius-lg); }
+.pixel-rounded-xl { border-radius: var(--radius-xl); }
+.pixel-rounded-2xl { border-radius: var(--radius-2xl); }
+.pixel-rounded-3xl { border-radius: var(--radius-3xl); }
+.pixel-rounded-full { border-radius: var(--radius-full); }
+
+/* Pixel Perfect Shadows */
+.pixel-shadow-xs { box-shadow: var(--shadow-xs); }
+.pixel-shadow-sm { box-shadow: var(--shadow-sm); }
+.pixel-shadow-md { box-shadow: var(--shadow-md); }
+.pixel-shadow-lg { box-shadow: var(--shadow-lg); }
+.pixel-shadow-xl { box-shadow: var(--shadow-xl); }
+.pixel-shadow-2xl { box-shadow: var(--shadow-2xl); }
+
+/* Pixel Perfect Transitions */
+.pixel-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pixel-transition-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pixel-transition-slow {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Pixel Perfect Glassmorphism */
+.pixel-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.pixel-glass-sm {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Pixel Perfect Focus States */
+.pixel-focus-ring {
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pixel-focus-ring:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.6);
+}
+
+/* Pixel Perfect Grid Templates */
+.pixel-grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.pixel-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.pixel-grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pixel-grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* Pixel Perfect Positions */
+.pixel-relative { position: relative; }
+.pixel-absolute { position: absolute; }
+.pixel-fixed { position: fixed; }
+.pixel-sticky { position: sticky; }
+
+/* Pixel Perfect Overflow */
+.pixel-overflow-hidden { overflow: hidden; }
+.pixel-overflow-auto { overflow: auto; }
+.pixel-overflow-scroll { overflow: scroll; }
+
+/* Pixel Perfect Cursor */
+.pixel-cursor-pointer { cursor: pointer; }
+.pixel-cursor-default { cursor: default; }
+.pixel-cursor-not-allowed { cursor: not-allowed; }
+
+/* Pixel Perfect User Select */
+.pixel-select-none { user-select: none; }
+.pixel-select-text { user-select: text; }
+.pixel-select-all { user-select: all; }
+
+/* Pixel Perfect Display */
+.pixel-block { display: block; }
+.pixel-inline { display: inline; }
+.pixel-inline-block { display: inline-block; }
+.pixel-flex { display: flex; }
+.pixel-inline-flex { display: inline-flex; }
+.pixel-grid { display: grid; }
+.pixel-hidden { display: none; }
+
+/* Pixel Perfect Alignment */
+.pixel-text-left { text-align: left; }
+.pixel-text-center { text-align: center; }
+.pixel-text-right { text-align: right; }
+
+.pixel-items-start { align-items: flex-start; }
+.pixel-items-center { align-items: center; }
+.pixel-items-end { align-items: flex-end; }
+.pixel-items-stretch { align-items: stretch; }
+
+.pixel-justify-start { justify-content: flex-start; }
+.pixel-justify-center { justify-content: center; }
+.pixel-justify-end { justify-content: flex-end; }
+.pixel-justify-between { justify-content: space-between; }
+.pixel-justify-around { justify-content: space-around; }
+
+/* Pixel Perfect Whitespace */
+.pixel-whitespace-nowrap { white-space: nowrap; }
+.pixel-whitespace-normal { white-space: normal; }
+
+/* Pixel Perfect Font Weights */
+.pixel-font-light { font-weight: 300; }
+.pixel-font-normal { font-weight: 400; }
+.pixel-font-medium { font-weight: 500; }
+.pixel-font-semibold { font-weight: 600; }
+.pixel-font-bold { font-weight: 700; }
+.pixel-font-extrabold { font-weight: 800; }
+
+/* Pixel Perfect Letter Spacing */
+.pixel-tracking-tight { letter-spacing: -0.025em; }
+.pixel-tracking-normal { letter-spacing: 0em; }
+.pixel-tracking-wide { letter-spacing: 0.025em; }
+
+/* Pixel Perfect Opacity */
+.pixel-opacity-0 { opacity: 0; }
+.pixel-opacity-10 { opacity: 0.1; }
+.pixel-opacity-20 { opacity: 0.2; }
+.pixel-opacity-30 { opacity: 0.3; }
+.pixel-opacity-40 { opacity: 0.4; }
+.pixel-opacity-50 { opacity: 0.5; }
+.pixel-opacity-60 { opacity: 0.6; }
+.pixel-opacity-70 { opacity: 0.7; }
+.pixel-opacity-80 { opacity: 0.8; }
+.pixel-opacity-90 { opacity: 0.9; }
+.pixel-opacity-100 { opacity: 1; }

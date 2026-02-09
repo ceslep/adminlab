@@ -1,29 +1,121 @@
 @import "tailwindcss";
+@import "./styles/pixel-perfect.css";
 
-/* Definición de variables CSS personalizadas con alto contraste */
+/* Pixel Perfect Color System */
 :root {
-  /* Colores de fondo - oscuros con buen contraste */
-  --bg-slate-blue: #1e293b;
-  --bg-deep-dark-blue: #0f172a;
-  
-  /* Colores de texto - alta legibilidad */
-  --soft-white: #f8fafc;
-  --light-cyan: #e2e8f0;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  
-  /* Colores de acento - visibles y contrastados */
-  --dark-blue: #334155;
-  --cyan-blue: #06b6d4;
-  --electric-blue: #3b82f6;
-  --tech-purple: #8b5cf6;
-  
-  /* Efectos de brillo */
-  --glow-blue: #3b82f680;
-  --glow-purple: #8b5cf680;
-  
-  /* Estados */
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
+  /* Primary Palette - Precisely Defined */
+  --slate-50: #f8fafc;
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  --slate-950: #020617;
+
+  /* Brand Colors - Pixel Perfect */
+  --indigo-50: #eef2ff;
+  --indigo-100: #e0e7ff;
+  --indigo-200: #c7d2fe;
+  --indigo-300: #a5b4fc;
+  --indigo-400: #818cf8;
+  --indigo-500: #6366f1;
+  --indigo-600: #4f46e5;
+  --indigo-700: #4338ca;
+  --indigo-800: #3730a3;
+  --indigo-900: #312e81;
+  --indigo-950: #1e1b4b;
+
+  --violet-50: #f5f3ff;
+  --violet-100: #ede9fe;
+  --violet-200: #ddd6fe;
+  --violet-300: #c4b5fd;
+  --violet-400: #a78bfa;
+  --violet-500: #8b5cf6;
+  --violet-600: #7c3aed;
+  --violet-700: #6d28d9;
+  --violet-800: #5b21b6;
+  --violet-900: #4c1d95;
+  --violet-950: #2e1065;
+
+  --purple-50: #faf5ff;
+  --purple-100: #f3e8ff;
+  --purple-200: #e9d5ff;
+  --purple-300: #d8b4fe;
+  --purple-400: #c084fc;
+  --purple-500: #a855f7;
+  --purple-600: #9333ea;
+  --purple-700: #7e22ce;
+  --purple-800: #6b21a8;
+  --purple-900: #581c87;
+  --purple-950: #3b0764;
+
+  --pink-50: #fdf2f8;
+  --pink-100: #fce7f3;
+  --pink-200: #fbcfe8;
+  --pink-300: #f9a8d4;
+  --pink-400: #f472b6;
+  --pink-500: #ec4899;
+  --pink-600: #db2777;
+  --pink-700: #be185d;
+  --pink-800: #9d174d;
+  --pink-900: #831843;
+  --pink-950: #500724;
+
+  /* Semantic Colors - Perfectly Calibrated */
+  --emerald-50: #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-200: #a7f3d0;
+  --emerald-300: #6ee7b7;
+  --emerald-400: #34d399;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #047857;
+  --emerald-800: #065f46;
+  --emerald-900: #064e3b;
+  --emerald-950: #022c22;
+
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-200: #fecaca;
+  --red-300: #fca5a5;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+  --red-800: #991b1b;
+  --red-900: #7f1d1d;
+  --red-950: #450a0a;
+
+  --amber-50: #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-200: #fde68a;
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
+  --amber-800: #92400e;
+  --amber-900: #78350f;
+  --amber-950: #451a03;
+
+  /* Legacy Variables - Smooth Migration */
+  --bg-slate-blue: var(--slate-800);
+  --bg-deep-dark-blue: var(--slate-900);
+  --soft-white: var(--slate-50);
+  --light-cyan: var(--slate-200);
+  --text-primary: var(--slate-800);
+  --text-secondary: var(--slate-500);
+  --dark-blue: var(--slate-700);
+  --cyan-blue: var(--indigo-500);
+  --electric-blue: var(--indigo-500);
+  --tech-purple: var(--violet-600);
+  --glow-blue: rgba(99, 102, 241, 0.5);
+  --glow-purple: rgba(139, 92, 246, 0.5);
+  --success: var(--emerald-500);
+  --warning: var(--amber-500);
+  --error: var(--red-500);
 }
