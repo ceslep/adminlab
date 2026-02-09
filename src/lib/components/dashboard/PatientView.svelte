@@ -1,8 +1,12 @@
 <script lang="ts">
-    import PatientFilters from './patient/PatientFilters.svelte';
+import PatientFilters from './patient/PatientFilters.svelte';
     import PatientList from './patient/PatientList.svelte';
     import DashboardHeader from './DashboardHeader.svelte';
     import PatientExamModal from './patient/PatientExamModal.simple.svelte';
+    // @ts-ignore
+    import PatientDetailsModal from './patient/PatientDetailsModal.svelte';
+    // @ts-ignore
+    import { getPatientDetails } from '../../../lib/api';
     // import PatientExamModal from './patient/PatientExamModal.svelte';
     // import PatientExamModal from './patient/PatientExamModal.enhanced.svelte';
     
@@ -16,8 +20,11 @@
     export let onDateChange: () => void;
     export let onRefresh: () => void;
     
-    let showExamModal = false;
+let showExamModal = false;
+    let showDetailsModal = false;
     let selectedPatient: any = null;
+    let patientDetails: any = null;
+    let loadingDetails = false;
     
     function handleViewExams(event: CustomEvent) {
         console.log('📋 handleViewExams llamado en PatientView:', event);
@@ -32,10 +39,32 @@
         selectedPatient = null;
     }
     
-    function handleViewDetails(event: CustomEvent) {
+async function handleViewDetails(event: CustomEvent) {
         const paciente = event.detail.paciente;
         console.log('👤 Ver detalles completos del paciente:', paciente);
-        // Aquí podríamos mostrar otro modal o navegar a una vista de detalles
+        
+        loadingDetails = true;
+        try {
+            const response = await getPatientDetails(paciente.identificacion);
+            if (response.success) {
+                patientDetails = (response as any).data || (response as any).patient;
+                showDetailsModal = true;
+                console.log('📋 Detalles del paciente cargados:', patientDetails);
+            } else {
+                console.error('❌ Error al cargar detalles:', response.message);
+                alert('Error al cargar detalles del paciente: ' + response.message);
+            }
+        } catch (error) {
+            console.error('❌ Error en la llamada:', error);
+            alert('Error de conexión al obtener detalles del paciente');
+        } finally {
+            loadingDetails = false;
+        }
+    }
+    
+    function handleCloseDetailsModal() {
+        showDetailsModal = false;
+        patientDetails = null;
     }
 </script>
 
@@ -58,7 +87,7 @@
             loading={loading}
         />
 
-        <PatientList 
+<PatientList 
             {pacientes}
             {loading}
             {searchQuery}
@@ -69,27 +98,21 @@
         />
         </main>
         
-        <!-- Botón de prueba -->
-        <div style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
-            <button 
-                on:click={() => {
-                    if (pacientes.length > 0) {
-                        selectedPatient = pacientes[0];
-                        showExamModal = true;
-                        console.log('🧪 Botón de prueba - Abriendo modal para:', selectedPatient.nombre_completo);
-                    }
-                }}
-                style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;"
-            >
-                🧪 Test Modal
-            </button>
-        </div>
+
         
-        {#if showExamModal}
+{#if showExamModal}
             <PatientExamModal 
                 paciente={selectedPatient}
                 show={showExamModal}
                 onClose={handleCloseExamModal}
+            />
+        {/if}
+        
+        {#if showDetailsModal}
+            <PatientDetailsModal 
+                paciente={patientDetails}
+                show={showDetailsModal}
+                onClose={handleCloseDetailsModal}
             />
         {/if}
     </div>

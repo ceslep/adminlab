@@ -4,11 +4,11 @@
     import EmptyState from '../shared/EmptyState.svelte';
     import { createEventDispatcher } from 'svelte';
     
-    export let pacientes: any[] = [];
+export let pacientes: any[] = [];
     export let loading: boolean = false;
     export let searchQuery: string = '';
-    export let onViewExams: ((event: CustomEvent) => void) | undefined = undefined;
-    export let onViewDetails: ((event: CustomEvent) => void) | undefined = undefined;
+    export const onViewExams: ((event: CustomEvent) => void) | undefined = undefined;
+    export const onViewDetails: ((event: CustomEvent) => void) | undefined = undefined;
     
     const dispatch = createEventDispatcher();
     
