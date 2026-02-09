@@ -5,7 +5,7 @@
 </script>
 
 {#if show}
-    <div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" on:click={(e) => e.target === e.currentTarget && onClose()}>
+    <div class="modal-overlay" role="dialog" aria-modal="true" tabindex="-1" on:click={(e) => e.target === e.currentTarget && onClose()} on:keydown={(e) => e.key === 'Escape' && onClose()}>
         <div class="modal-container">
             <div class="modal-header">
                 <h3>Exámenes de {paciente?.nombre_completo}</h3>
