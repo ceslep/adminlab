@@ -343,27 +343,33 @@
     }
 
     .action-button.primary {
-        background: linear-gradient(135deg, var(--indigo-500), var(--violet-600));
+        background: linear-gradient(135deg, #3730a3, #5b21b6);
         color: white;
         box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        font-weight: 700;
     }
 
     .action-button.primary:hover {
         transform: translateY(-2px);
         box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.45);
-        background: linear-gradient(135deg, var(--indigo-600), var(--violet-700));
+        background: linear-gradient(135deg, #312e81, #4c1d95);
     }
 
     .action-button.secondary {
-        background: linear-gradient(135deg, var(--emerald-500), var(--green-600));
+        background: linear-gradient(135deg, #059669, #047857);
         color: white;
         box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        font-weight: 700;
     }
 
     .action-button.secondary:hover {
         transform: translateY(-2px);
         box-shadow: 0 15px 35px -5px rgba(16, 185, 129, 0.45);
-        background: linear-gradient(135deg, var(--emerald-600), var(--green-700));
+        background: linear-gradient(135deg, #047857, #065f46);
     }
 
     .action-button:active {

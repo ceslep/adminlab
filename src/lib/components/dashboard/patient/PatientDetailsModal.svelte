@@ -234,14 +234,14 @@
         flex-direction: column;
     }
     
-    @keyframes modalSlideIn {
+@keyframes modalSlideIn {
         from {
             opacity: 0;
-            transform: translateY(-30px) scale(0.9);
+            transform: translateY(-20px);
         }
         to {
             opacity: 1;
-            transform: translateY(0) scale(1);
+            transform: translateY(0);
         }
     }
     
@@ -295,11 +295,12 @@
     }
     
     .close-btn {
-        background: rgba(255, 255, 255, 0.2);
+background: rgba(255, 255, 255, 0.3);
         border: none;
         font-size: 1.5rem;
         cursor: pointer;
         color: white;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         padding: 0.75rem;
         border-radius: 50%;
         width: 48px;

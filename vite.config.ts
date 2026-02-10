@@ -31,7 +31,7 @@ export default defineConfig({
       $assets: resolve('./src/assets')
     }
   },
-  publicDir: 'src/assets',
+  publicDir: 'public',
   
   // Build optimizations for enterprise performance
   build: {

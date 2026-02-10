@@ -126,7 +126,7 @@
         position: absolute;
         left: 16px;
         color: var(--slate-400);
-        transition: color 300s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: color 300ms cubic-bezier(0.4, 0, 0.2, 1);
         pointer-events: none;
     }
 
@@ -144,13 +144,13 @@
         font-weight: 500;
         background: rgba(241, 245, 249, 0.6);
         color: var(--slate-900);
-        transition: all 300s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
         font-family: inherit;
         box-sizing: border-box;
     }
 
     .search-input::placeholder {
-        color: var(--slate-400);
+        color: var(--slate-500);
     }
     
     .search-input:focus, .date-input:focus {
@@ -183,7 +183,7 @@
     .count-icon {
         width: 20px;
         height: 20px;
-        color: var(--indigo-500);
+        color: var(--indigo-600);
     }
 
     .count-text {
@@ -201,8 +201,8 @@
 
     .total-label {
         font-size: 12px;
-        font-weight: 500;
-        color: var(--slate-500);
+        font-weight: 600;
+        color: var(--slate-600);
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
@@ -215,13 +215,13 @@
         justify-content: center;
         gap: 8px;
         padding: 12px 24px;
-        border: none;
+        border: 1px solid rgba(255, 255, 255, 0.2);
         border-radius: 1rem;
         font-weight: 600;
         font-size: 14px;
         cursor: pointer;
-        transition: all 300s cubic-bezier(0.4, 0, 0.2, 1);
-        background: linear-gradient(135deg, var(--emerald-500), var(--green-600));
+        transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+        background: linear-gradient(135deg, #047857, #065f46);
         color: white;
         box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.35);
         overflow: hidden;
@@ -230,7 +230,7 @@
     .refresh-button:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 15px 35px -5px rgba(16, 185, 129, 0.45);
-        background: linear-gradient(135deg, var(--emerald-600), var(--green-700));
+        background: linear-gradient(135deg, #065f46, #064e3b);
     }
 
     .refresh-button:active:not(:disabled) {
@@ -258,7 +258,7 @@
     .refresh-icon {
         width: 16px;
         height: 16px;
-        transition: transform 300s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .refresh-button:hover:not(:disabled) .refresh-icon {
@@ -278,8 +278,12 @@
     }
 
     .button-text {
-        font-weight: 600;
+        font-weight: 800;
         font-size: 14px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+        color: #ffffff;
+        position: relative;
+        z-index: 10;
     }
 
     .button-glow {
@@ -287,7 +291,7 @@
         inset: 0;
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
         transform: translateX(-100%);
-        transition: transform 500s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
         pointer-events: none;
     }
 

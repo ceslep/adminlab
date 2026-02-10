@@ -54,8 +54,8 @@
     >
         <div 
             class="modal-container {sizeClasses[size]}"
-            in:fly={{ y: -20, duration: 500, easing: cubicOut }}
-            out:fly={{ y: 20, duration: 300 }}
+            in:fade={{ duration: 300 }}
+            out:fade={{ duration: 200 }}
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
@@ -182,9 +182,9 @@
         width: 44px;
         height: 44px;
         border-radius: 1rem;
-        background: rgba(239, 68, 68, 0.1);
-        border: 1px solid rgba(239, 68, 68, 0.2);
-        color: #ef4444;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        color: #dc2626;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -193,6 +193,20 @@
         flex-shrink: 0;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
+    }
+    
+    .modal-close-button:hover {
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.25));
+        border-color: rgba(239, 68, 68, 0.5);
+        color: #991b1b;
+        transform: rotate(180deg) scale(1.1);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        border-width: 2px;
+    }
+    
+    .modal-close-button:active {
+        transform: rotate(90deg) scale(0.95);
     }
 
     .close-button-content {

@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { isAuthenticated, user, logout, login } from './stores/auth';
     import type { User } from './lib/types';
-    import Login from './lib/components/Login.svelte';
+    import Login from './lib/components/Login.saas.svelte';
     import Dashboard from './lib/components/Dashboard.svelte';
     
     function handleLoginSuccess(event: CustomEvent) {

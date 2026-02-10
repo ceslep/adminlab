@@ -18,6 +18,9 @@
         ChevronRight
     } from 'lucide-svelte';
     import Button from './shared/Button.svelte';
+    import { LOGO_URL } from '../../constants';
+    
+    const logoUrl = LOGO_URL;
     
     export let isCollapsed: boolean = false;
     export let currentPath: string = '/';
@@ -62,7 +65,23 @@
         <div class="sidebar-header">
             <div class="logo-container">
                 <div class="logo">
-                    <Heart class="w-6 h-6 text-white" />
+                    <img 
+                        src={logoUrl} 
+                        alt="AdminLab Logo" 
+                        class="logo-image"
+                        on:error={(e) => {
+                            // Fallback to icon if image fails to load
+                            const target = e.currentTarget as HTMLImageElement;
+                            target.style.display = 'none';
+                            const fallback = target.nextElementSibling as HTMLElement;
+                            if (fallback) {
+                                fallback.style.display = 'flex';
+                            }
+                        }}
+                    />
+                    <div class="logo-fallback">
+                        <Heart class="w-6 h-6 text-white" />
+                    </div>
                 </div>
                 {#if !isCollapsed}
                     <div 
@@ -235,6 +254,22 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        overflow: hidden;
+    }
+    
+    .logo-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 1rem;
+    }
+    
+    .logo-fallback {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
     }
     
     .logo-text {
@@ -437,9 +472,37 @@
         transform: translateX(2px);
     }
     
+    .footer-item.logout {
+        border: 1px solid transparent;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .footer-item.logout::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+        opacity: 0;
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
     .footer-item.logout:hover {
-        background: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
+        background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+        color: #b91c1c;
+        transform: translateX(8px) scale(1.05);
+        border-color: rgba(239, 68, 68, 0.3);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.25);
+        border-left: 4px solid #ef4444;
+    }
+    
+    .footer-item.logout:hover::before {
+        opacity: 1;
+    }
+    
+    .footer-item.logout:active {
+        transform: translateX(2px) scale(0.98);
     }
     
     .footer-item.collapsed {
