@@ -231,9 +231,9 @@
                         class="login-options"
                         in:fade={{ duration: 600, delay: 700, easing: cubicOut }}
                     >
-                        <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+<button type="button" class="forgot-password" on:click={() => console.log('Forgot password')}>¿Olvidaste tu contraseña?</button>
                         <div class="divider">o</div>
-                        <a href="#" class="signup-link">Crear cuenta nueva</a>
+                        <button type="button" class="signup-link" on:click={() => console.log('Sign up')}>Crear cuenta nueva</button>
                     </div>
                 </form>
 
@@ -246,9 +246,9 @@
                         © 2024 AdminLab. Todos los derechos reservados.
                     </p>
                     <div class="footer-links">
-                        <a href="#" class="footer-link">Términos</a>
-                        <a href="#" class="footer-link">Privacidad</a>
-                        <a href="#" class="footer-link">Ayuda</a>
+<button type="button" class="footer-link" on:click={() => console.log('Terms')}>Términos</button>
+                        <button type="button" class="footer-link" on:click={() => console.log('Privacy')}>Privacidad</button>
+                        <button type="button" class="footer-link" on:click={() => console.log('Help')}>Ayuda</button>
                     </div>
                 </div>
             </div>
@@ -710,11 +710,17 @@
         border-top: 1px solid #e2e8f0;
     }
 
-    .forgot-password {
+.forgot-password {
         color: #667eea;
         text-decoration: none;
         font-weight: 500;
         transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
     }
 
     .forgot-password:hover {
@@ -726,11 +732,17 @@
         font-weight: 500;
     }
 
-    .signup-link {
+.signup-link {
         color: #764ba2;
         text-decoration: none;
         font-weight: 600;
         transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        font-size: inherit;
+        font-family: inherit;
     }
 
     .signup-link:hover {
@@ -757,11 +769,16 @@
         gap: 1.5rem;
     }
 
-    .footer-link {
+.footer-link {
         color: #a0aec0;
         text-decoration: none;
         font-size: 0.875rem;
         transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        font-family: inherit;
     }
 
     .footer-link:hover {

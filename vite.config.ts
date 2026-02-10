@@ -6,17 +6,14 @@ import { resolve } from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    svelte({
-      // Enable CSS hot module replacement for smooth development
-      hot: !process.env.PROD,
-      
+svelte({
       // Optimize for production
       emitCss: true,
       
       // Enable premium CSS features
       compilerOptions: {
         css: 'injected',
-        dev: true
+        dev: !process.env.PROD
       }
     }),
     tailwindcss()
@@ -39,20 +36,17 @@ export default defineConfig({
     minify: 'esbuild',
     cssMinify: true,
     sourcemap: false,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Separate vendor chunks for better caching
-          vendor: ['svelte', 'lucide-svelte', 'framer-motion'],
-          
-          // Separate UI components
-          ui: ['./src/lib/components'],
-          
-          // Separate styles
-          styles: ['./src/styles']
-        }
-      }
-    },
+// rollupOptions: {
+    //   output: {
+    //     manualChunks: {
+    //       // Separate vendor chunks for better caching
+    //       vendor: ['svelte', 'lucide-svelte', 'framer-motion'],
+    //       
+    //       // Separate styles
+    //       styles: ['./src/styles']
+    //     }
+    //   }
+    // },
     
     // Optimize assets
     assetsInlineLimit: 4096,
