@@ -662,9 +662,7 @@
 
 
 
-    .submit-button:hover:not(:disabled) .button-arrow {
-        transform: translateX(4px);
-    }
+
 
     .button-glow {
         position: absolute;

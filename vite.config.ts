@@ -12,8 +12,7 @@ svelte({
       
       // Enable premium CSS features
       compilerOptions: {
-        css: 'injected',
-        dev: !process.env.PROD
+        css: 'injected'
       }
     }),
     tailwindcss()

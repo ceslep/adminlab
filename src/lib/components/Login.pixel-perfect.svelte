@@ -375,11 +375,7 @@
 		line-height: 24px;
 	}
 
-	.subtitle-icon {
-		width: 16px;
-		height: 16px;
-		color: var(--indigo-500);
-	}
+
 
 	/* Error Message */
 	.error-message {
@@ -567,11 +563,7 @@
 
 
 
-	.loading-spinner {
-		width: 20px;
-		height: 20px;
-		animation: spin 1s linear infinite;
-	}
+
 
 
 

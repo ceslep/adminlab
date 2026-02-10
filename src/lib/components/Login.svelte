@@ -361,10 +361,7 @@
 		line-height: 24px;
 	}
 
-	.subtitle-icon {
-		width: 16px;
-		height: 16px;
-	}
+
 
 	/* Enhanced Form Elements */
 	form {
