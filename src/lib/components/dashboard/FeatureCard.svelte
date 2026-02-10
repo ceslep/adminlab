@@ -10,7 +10,7 @@
     export let buttonText: string = '';
     export let onClick: () => void;
     export let disabled: boolean = false;
-    export let variant: 'primary' | 'secondary' | 'success' = 'primary';
+    export const variant: 'primary' | 'secondary' | 'success' = 'primary';
 </script>
 
 <div 

@@ -443,11 +443,7 @@
         transform: translateX(10px);
     }
 
-    .feature-icon {
-        width: 24px;
-        height: 24px;
-        flex-shrink: 0;
-    }
+
 
     .feature-text {
         font-size: 0.95rem;
@@ -542,15 +538,7 @@
         align-items: center;
     }
 
-    .input-icon {
-        position: absolute;
-        left: 1rem;
-        color: #a0aec0;
-        transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        z-index: 2;
-        width: 20px;
-        height: 20px;
-    }
+
 
     .input-field {
         width: 100%;

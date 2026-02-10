@@ -1,6 +1,6 @@
 <script lang="ts">
     export let lines: number = 3;
-    export let height: string = 'h-4';
+    export const height: string = 'h-4';
     export let avatar: boolean = false;
     export let title: boolean = false;
     export let paragraph: boolean = true;

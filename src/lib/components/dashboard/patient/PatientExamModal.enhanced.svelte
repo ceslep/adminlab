@@ -4,6 +4,7 @@
     import Avatar from '../shared/Avatar.svelte';
     import LoadingSpinner from '../shared/LoadingSpinner.svelte';
     import { onMount } from 'svelte';
+    import { getEstadoVariant } from './getEstadoVariant';
     
     export let paciente: any;
     export let show: boolean = false;
@@ -138,20 +139,7 @@
         return 'https://mycar.iedeoccidente.com/api';
     }
     
-    function getEstadoVariant(estado: string) {
-        switch (estado?.toLowerCase()) {
-            case 'realizado':
-            case 'completado':
-                return 'green';
-            case 'proceso':
-            case 'pendiente':
-                return 'yellow';
-            case 'cancelado':
-                return 'red';
-            default:
-                return 'gray';
-        }
-    }
+
     
     function formatearFecha(fecha: string): string {
         if (!fecha) return 'No definida';

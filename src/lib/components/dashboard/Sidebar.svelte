@@ -193,10 +193,14 @@
     </aside>
     
     <!-- Overlay for mobile -->
-    {#if !isCollapsed}
+{#if !isCollapsed}
         <div 
             class="sidebar-overlay"
             on:click={toggleSidebar}
+            on:keydown={(e) => e.key === 'Enter' && toggleSidebar()}
+            role="button"
+            tabindex="0"
+            aria-label="Close sidebar"
             in:fade={{ duration: 200 }}
         ></div>
     {/if}

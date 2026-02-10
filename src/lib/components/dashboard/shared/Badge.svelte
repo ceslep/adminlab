@@ -1,9 +1,9 @@
 <script lang="ts">
     export let text: string = '';
-    export let variant: 'indigo' | 'emerald' | 'violet' | 'amber' | 'rose' | 'slate' | 'blue' | 'green' | 'purple' | 'yellow' = 'indigo';
+    export let variant: 'indigo' | 'emerald' | 'violet' | 'amber' | 'rose' | 'slate' | 'blue' | 'green' | 'purple' | 'yellow' | 'red' | 'gray' = 'indigo';
     export let size: 'sm' | 'md' = 'md';
     
-    const variants = {
+const variants = {
         indigo: 'bg-indigo-50 text-indigo-700 border border-indigo-200/60',
         emerald: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
         violet: 'bg-violet-50 text-violet-700 border border-violet-200/60',
@@ -14,7 +14,10 @@
         blue: 'bg-indigo-50 text-indigo-700 border border-indigo-200/60',
         green: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
         purple: 'bg-violet-50 text-violet-700 border border-violet-200/60',
-        yellow: 'bg-amber-50 text-amber-700 border border-amber-200/60'
+        yellow: 'bg-amber-50 text-amber-700 border border-amber-200/60',
+        // Additional variants
+        red: 'bg-red-50 text-red-700 border border-red-200/60',
+        gray: 'bg-slate-50 text-slate-700 border border-slate-200/60'
     };
     
     const sizes = {
