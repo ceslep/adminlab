@@ -130,10 +130,7 @@
         pointer-events: none;
     }
 
-    .input-icon .icon {
-        width: 20px;
-        height: 20px;
-    }
+
     
     .search-input, .date-input {
         width: 100%;
@@ -180,11 +177,7 @@
         gap: 12px;
     }
 
-    .count-icon {
-        width: 20px;
-        height: 20px;
-        color: var(--indigo-600);
-    }
+
 
     .count-text {
         display: flex;
@@ -255,21 +248,7 @@
         gap: 8px;
     }
 
-    .refresh-icon {
-        width: 16px;
-        height: 16px;
-        transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
-    }
 
-    .refresh-button:hover:not(:disabled) .refresh-icon {
-        transform: rotate(180deg);
-    }
-
-    .loading-spinner {
-        width: 16px;
-        height: 16px;
-        animation: spin 1s linear infinite;
-    }
 
     @keyframes spin {
         to {
@@ -349,9 +328,6 @@
             left: 14px;
         }
 
-        .input-icon .icon {
-            width: 18px;
-            height: 18px;
-        }
+
     }
 </style>

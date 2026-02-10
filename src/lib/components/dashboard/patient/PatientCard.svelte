@@ -165,9 +165,7 @@
         transform: scale(1.2);
     }
 
-    .patient-card:hover .action-button .button-arrow {
-        transform: translateX(4px);
-    }
+
     
     /* Premium Header */
     .patient-header {
@@ -220,11 +218,7 @@
         font-weight: 500;
     }
 
-    .contact-icon {
-        width: 16px;
-        height: 16px;
-        color: var(--slate-400);
-    }
+
 
     .patient-age {
         display: flex;
@@ -385,20 +379,13 @@
         gap: 8px;
     }
 
-    .button-icon {
-        width: 16px;
-        height: 16px;
-    }
+
 
     .button-text {
         font-weight: 600;
     }
 
-    .button-arrow {
-        width: 14px;
-        height: 14px;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+
 
     .button-glow {
         position: absolute;

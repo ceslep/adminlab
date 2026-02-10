@@ -241,9 +241,7 @@
         transform: scale(1.05);
     }
 
-    .modal-close-button:hover .close-icon {
-        transform: rotate(90deg);
-    }
+
 
     .modal-close-button:hover .close-button-glow {
         transform: translateX(0);

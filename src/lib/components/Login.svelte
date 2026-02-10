@@ -327,15 +327,7 @@
 		transition: transform 500s cubic-bezier(0.4, 0, 0.2, 1);
 	}
 
-	.logo-sparkle {
-		position: absolute;
-		top: -8px;
-		right: -8px;
-		width: 24px;
-		height: 24px;
-		color: var(--amber-400);
-		animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-	}
+
 
 	@keyframes pulse {
 		0%, 100% {
@@ -408,15 +400,7 @@
 		box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.6);
 	}
 
-	/* Modern Loading Spinner */
-	.loader {
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		border: 2.5px solid rgba(255, 255, 255, 0.25);
-		border-left-color: white;
-		animation: spin 1s linear infinite;
-	}
+
 	
 	@keyframes spin {
 		to {
@@ -458,15 +442,7 @@
 		}
 	}
 
-	/* Pulse-out loading spinner */
-	.loader {
-		width: 20px;
-		height: 20px;
-		border-radius: 50%;
-		border: 3px solid rgba(255, 255, 255, 0.3);
-		border-left-color: white;
-		animation: spin 1s linear infinite;
-	}
+
 	@keyframes spin {
 		to {
 			transform: rotate(360deg);

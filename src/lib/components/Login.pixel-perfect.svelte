@@ -341,15 +341,7 @@
 		transform: scale(1.1);
 	}
 
-	.logo-sparkle {
-		position: absolute;
-		top: -8px;
-		right: -8px;
-		width: 24px;
-		height: 24px;
-		color: var(--amber-400);
-		animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-	}
+
 
 	@keyframes pulse {
 		0%, 100% {
@@ -404,11 +396,7 @@
 		box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.1);
 	}
 
-	.error-icon {
-		width: 20px;
-		height: 20px;
-		flex-shrink: 0;
-	}
+
 
 	/* Input Groups */
 	.input-group {
@@ -424,10 +412,7 @@
 		color: var(--slate-400);
 	}
 
-	.input-icon .icon {
-		width: 20px;
-		height: 20px;
-	}
+
 
 	.input-field {
 		width: 100%;
@@ -510,10 +495,7 @@
 		background: rgba(148, 163, 184, 0.1);
 	}
 
-	.password-toggle .icon {
-		width: 20px;
-		height: 20px;
-	}
+
 
 	.input-focus-ring {
 		position: absolute;
@@ -583,10 +565,7 @@
 		gap: 12px;
 	}
 
-	.button-icon {
-		width: 20px;
-		height: 20px;
-	}
+
 
 	.loading-spinner {
 		width: 20px;
@@ -594,11 +573,7 @@
 		animation: spin 1s linear infinite;
 	}
 
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
-		}
-	}
+
 
 	/* Responsive Design */
 	@media (max-width: 768px) {

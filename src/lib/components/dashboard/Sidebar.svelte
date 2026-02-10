@@ -310,11 +310,7 @@
         justify-content: center;
     }
 
-    .toggle-icon {
-        width: 18px;
-        height: 18px;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+
 
     .toggle-glow {
         position: absolute;
@@ -330,9 +326,7 @@
         transform: scale(1.05);
     }
 
-    .toggle-button:hover .toggle-icon {
-        transform: scale(1.1);
-    }
+
 
     .toggle-button:hover .toggle-glow {
         transform: translateX(0);

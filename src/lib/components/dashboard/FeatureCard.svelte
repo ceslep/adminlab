@@ -105,9 +105,7 @@
         transform: scale(1.15) rotate(5deg);
     }
     
-    .feature-card:hover:not(.disabled) .feature-arrow {
-        transform: translateX(4px);
-    }
+
     
     .feature-card:active:not(.disabled) {
         transform: translateY(-8px) scale(1.02);
@@ -233,11 +231,7 @@
         opacity: 0.6;
     }
     
-    .feature-arrow {
-        width: 4.5rem;
-        height: 4.5rem;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+
     
     .feature-overlay {
         position: absolute;

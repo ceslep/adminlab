@@ -557,9 +557,7 @@
         color: #a0aec0;
     }
 
-    .input-group.focused .input-icon {
-        color: #667eea;
-    }
+
 
     .input-group.focused .input-field {
         border-color: #667eea;
@@ -598,10 +596,7 @@
         color: #667eea;
     }
 
-    .toggle-icon {
-        width: 18px;
-        height: 18px;
-    }
+
 
     /* Error Message */
     .error-message {
@@ -665,11 +660,7 @@
         to { transform: rotate(360deg); }
     }
 
-    .button-arrow {
-        width: 18px;
-        height: 18px;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+
 
     .submit-button:hover:not(:disabled) .button-arrow {
         transform: translateX(4px);
