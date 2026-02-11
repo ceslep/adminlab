@@ -4,7 +4,7 @@
  import PatientFilters from './patient/PatientFilters.svelte';
     import PatientList from './patient/PatientList.svelte';
     import DashboardHeader from './DashboardHeader.svelte';
-    import PatientExamModal from './patient/PatientExamModal.simple.svelte';
+    import PatientExamModal from './patient/ExamenesModal.svelte';
     // @ts-ignore
     import PatientDetailsModal from './patient/PatientDetailsModal.svelte';
     // @ts-ignore
@@ -13,7 +13,7 @@
     // import PatientExamModal from './patient/PatientExamModal.enhanced.svelte';
     
     export let searchQuery: string = '';
-    export let selectedDate: string = '';
+    export let selectedDate: string = new Date().toISOString().split('T')[0];
     export let pacientes: any[] = [];
     export let loading: boolean = false;
     export let onBack: () => void;
@@ -37,6 +37,7 @@ let showExamModal = false;
     }
     
     function handleCloseExamModal() {
+        console.log('🔴 Cerrando modal de exámenes');
         showExamModal = false;
         selectedPatient = null;
     }

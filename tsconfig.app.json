@@ -15,7 +15,15 @@
      */
     "allowJs": true,
     "checkJs": true,
-    "moduleDetection": "force"
+    "moduleDetection": "force",
+    "baseUrl": ".",
+    "paths": {
+      "$lib/*": ["src/lib/*"],
+      "$components/*": ["src/lib/components/*"],
+      "$styles/*": ["src/styles/*"],
+      "$utils/*": ["src/lib/utils/*"],
+      "$assets/*": ["src/assets/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
 }

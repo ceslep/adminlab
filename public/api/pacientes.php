@@ -9,7 +9,380 @@ $response = ['success' => false, 'message' => 'Método no permitido. Use POST.']
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
-        // Get POST parameters
+        // Check for specific action
+        $action = isset($_POST['action']) ? $_POST['action'] : '';
+        
+        if ($action === 'consulta_pacientes_resultados') {
+            // Handle patient results search
+            $identificacion = trim($_POST['identificacion'] ?? '');
+            $nombres = trim($_POST['nombres'] ?? '');
+            $telefono = trim($_POST['telefono'] ?? '');
+            $ciudad = trim($_POST['ciudad'] ?? '');
+            $entidad = trim($_POST['entidad'] ?? '');
+            $include_examenes = $_POST['include_examenes'] ?? '1';
+            $solo_con_resultados = $_POST['solo_con_resultados'] ?? '0';
+            $limit = isset($_POST['limit']) ? (int) $_POST['limit'] : 50;
+            
+            // Validate that at least one criterion is present
+            if (empty($identificacion) && empty($nombres) && empty($telefono) && empty($ciudad) && empty($entidad)) {
+                $response = ['success' => false, 'message' => 'Debe ingresar al menos un criterio de búsqueda.'];
+                echo json_encode($response, JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+            
+            // Build SQL base for patients
+            $sql_pacientes = "
+                SELECT
+                    p.identificacion,
+                    CONCAT_WS(' ', p.apellidos, p.nombres) as nombre_completo,
+                    p.apellidos,
+                    p.nombres,
+                    p.edad,
+                    p.genero,
+                    p.fecnac,
+                    p.telefono,
+                    p.telefono_movil,
+                    p.telefono_residencia2,
+                    p.correo,
+                    p.ciudad_residencia,
+                    p.direccion_residencia,
+                    p.entidad,
+                    COUNT(DISTINCT e.fecha) as total_visitas,
+                    MAX(e.fecha) as ultima_visita
+                FROM paciente p
+                LEFT JOIN examenes e ON p.identificacion = e.identificacion
+                WHERE 1=1";
+            $params = [];
+            $param_types = "";
+            
+            // Filter by identification
+            if (!empty($identificacion)) {
+                $sql_pacientes .= " AND p.identificacion LIKE ?";
+                $params[] = "%" . $identificacion . "%";
+                $param_types .= "s";
+            }
+            
+            // Filter by names (search in all name fields)
+            if (!empty($nombres)) {
+                $nombres_like = "%" . $nombres . "%";
+                $sql_pacientes .= " AND (p.nombres LIKE ? OR p.apellidos LIKE ? OR p.nombre1 LIKE ? OR p.nombre2 LIKE ? OR p.apellido1 LIKE ? OR p.apellido2 LIKE ?)";
+                $params = array_merge($params, [$nombres_like, $nombres_like, $nombres_like, $nombres_like, $nombres_like, $nombres_like]);
+                $param_types .= "ssssss";
+            }
+            
+            // Filter by phone (search in all phone fields)
+            if (!empty($telefono)) {
+                $telefono_like = "%" . $telefono . "%";
+                $sql_pacientes .= " AND (p.telefono LIKE ? OR p.telefono_movil LIKE ? OR p.telefono_residencia2 LIKE ?)";
+                $params = array_merge($params, [$telefono_like, $telefono_like, $telefono_like]);
+                $param_types .= "sss";
+            }
+            
+            // Filter by city
+            if (!empty($ciudad)) {
+                $sql_pacientes .= " AND p.ciudad_residencia LIKE ?";
+                $params[] = "%" . $ciudad . "%";
+                $param_types .= "s";
+            }
+            
+            // Filter by entity
+            if (!empty($entidad)) {
+                $sql_pacientes .= " AND p.entidad LIKE ?";
+                $params[] = "%" . $entidad . "%";
+                $param_types .= "s";
+            }
+            
+            $sql_pacientes .= " GROUP BY p.identificacion ORDER BY p.apellidos ASC, p.nombres ASC LIMIT " . $limit;
+            
+            // Execute patient query
+            $stmt_pacientes = $mysqli->prepare($sql_pacientes);
+            if (!empty($params)) {
+                $stmt_pacientes->bind_param($param_types, ...$params);
+            }
+            $stmt_pacientes->execute();
+            $result_pacientes = $stmt_pacientes->get_result();
+            $pacientes = [];
+            
+            // Check if procedures table exists
+            $procedimientos_exists = $mysqli->query("SHOW TABLES LIKE 'procedimientos'")->num_rows > 0;
+            
+            while ($paciente_row = $result_pacientes->fetch_assoc()) {
+                $identificacion_p = $paciente_row['identificacion'];
+                
+                // Format main phone
+                $telefono_principal = $paciente_row['telefono'] ?: $paciente_row['telefono_movil'] ?: $paciente_row['telefono_residencia2'] ?: '';
+                
+                // Calculate age if not in database
+                $edad_formateada = $paciente_row['edad'];
+                if (empty($edad_formateada) && !empty($paciente_row['fecnac']) && $paciente_row['fecnac'] !== '0000-00-00') {
+                    $fecha_nac = new DateTime($paciente_row['fecnac']);
+                    $hoy = new DateTime();
+                    $edad_formateada = $hoy->diff($fecha_nac)->y;
+                }
+                
+                $paciente_data = [
+                    'identificacion' => $identificacion_p,
+                    'nombre_completo' => $paciente_row['nombre_completo'],
+                    'apellidos' => $paciente_row['apellidos'],
+                    'nombres' => $paciente_row['nombres'],
+                    'edad' => $edad_formateada,
+                    'genero' => $paciente_row['genero'],
+                    'telefono' => $telefono_principal,
+                    'telefono_fijo' => $paciente_row['telefono'],
+                    'telefono_movil' => $paciente_row['telefono_movil'],
+                    'telefono_residencia2' => $paciente_row['telefono_residencia2'],
+                    'correo' => $paciente_row['correo'],
+                    'ciudad_residencia' => $paciente_row['ciudad_residencia'],
+                    'direccion_residencia' => $paciente_row['direccion_residencia'],
+                    'entidad' => $paciente_row['entidad'],
+                    'total_visitas' => $paciente_row['total_visitas'] ?? 0,
+                    'ultima_visita' => $paciente_row['ultima_visita'] ?? '',
+                    'examenes' => []
+                ];
+                
+                // Get patient exams if requested
+                if ($include_examenes == '1') {
+                    $sql_examenes = "SELECT
+                        e.fecha, e.codexamen, e.realizado, e.entidad";
+                    if ($procedimientos_exists) {
+                        $sql_examenes .= ",
+                            pr.nombre as nombre_examen,
+                            pr.codigo as codigo_examen,
+                            pr.tabla as examen_tabla,
+                            pr.tipo as tipo_examen,
+                            pr.tipoprocedimiento as tipo_procedimiento,
+                            pr.abreviatura";
+                    }
+                    $sql_examenes .= " FROM examenes e
+                        INNER JOIN paciente p ON e.identificacion = p.identificacion";
+                    if ($procedimientos_exists) {
+                        $sql_examenes .= " LEFT JOIN procedimientos pr ON e.codexamen = pr.codigo";
+                    }
+                    $sql_examenes .= " WHERE e.identificacion = ? ORDER BY e.fecha DESC";
+                    $stmt_examenes = $mysqli->prepare($sql_examenes);
+                    $stmt_examenes->bind_param("s", $identificacion_p);
+                    $stmt_examenes->execute();
+                    $result_examenes = $stmt_examenes->get_result();
+                    
+                    while ($examen_row = $result_examenes->fetch_assoc()) {
+                        $examen_data = [
+                            'fecha' => $examen_row['fecha'],
+                            'fecha_examen' => $examen_row['fecha'],
+                            'codigo' => $examen_row['codexamen'],
+                            'codexamen' => $examen_row['codexamen'],
+                            'entidad' => $examen_row['entidad'],
+                            'realizado' => $examen_row['realizado']
+                        ];
+                        
+                        if ($procedimientos_exists) {
+                            $examen_data['nombre'] = $examen_row['nombre_examen'] ?? $examen_row['abreviatura'] ?? 'Examen #' . $examen_row['codexamen'];
+                            $examen_data['tipo'] = $examen_row['tipo_examen'] ?? 'No especificado';
+                            $examen_data['tabla'] = $examen_row['examen_tabla'] ?? '';
+                            $examen_data['procedimiento'] = $examen_row['tipo_procedimiento'] ?? '';
+                            $examen_data['abreviatura'] = $examen_row['abreviatura'] ?? '';
+                            $examen_data['tipo_procedimiento'] = $examen_row['tipo_procedimiento'] ?? '';
+                            
+                            // Get actual exam result from dynamic table
+                            if (!empty($examen_row['examen_tabla'])) {
+                                $tabla_resultado = $examen_row['examen_tabla'];
+                                $tabla_existe = $mysqli->query("SHOW TABLES LIKE '$tabla_resultado'")->num_rows > 0;
+                                
+                                if ($tabla_existe) {
+                                    // Get table structure
+                                    $estructura = $mysqli->query("DESCRIBE `$tabla_resultado`");
+                                    $columnas = [];
+                                    while ($col = $estructura->fetch_assoc()) {
+                                        $columnas[] = $col['Field'];
+                                    }
+                                    
+                                    // Build dynamic WHERE
+                                    $where_clauses = [];
+                                    $where_params = [];
+                                    $where_types = "";
+                                    
+                                    if (in_array('identificacion', $columnas)) {
+                                        $where_clauses[] = "identificacion = ?";
+                                        $where_params[] = $identificacion_p;
+                                        $where_types .= "s";
+                                    }
+                                    
+                                    if (in_array('codexamen', $columnas)) {
+                                        $where_clauses[] = "codexamen = ?";
+                                        $where_params[] = $examen_row['codexamen'];
+                                        $where_types .= "s";
+                                    } elseif (in_array('examen', $columnas)) {
+                                        $where_clauses[] = "examen = ?";
+                                        $where_params[] = $examen_row['codexamen'];
+                                        $where_types .= "s";
+                                    }
+                                    
+                                    if (in_array('fecha', $columnas)) {
+                                        $where_clauses[] = "fecha = ?";
+                                        $where_params[] = $examen_row['fecha'];
+                                        $where_types .= "s";
+                                    }
+                                    
+                                    if (!empty($where_clauses)) {
+                                        $where_sql = implode(" AND ", $where_clauses);
+                                        $sql_resultado = "SELECT * FROM `$tabla_resultado` WHERE $where_sql LIMIT 1";
+                                        
+                                        try {
+                                            $stmt_resultado = $mysqli->prepare($sql_resultado);
+                                            $stmt_resultado->bind_param($where_types, ...$where_params);
+                                            $stmt_resultado->execute();
+                                            $result_resultado = $stmt_resultado->get_result();
+                                            
+                                            if ($result_resultado->num_rows > 0) {
+                                                $datos_resultado = $result_resultado->fetch_assoc();
+                                                
+                                                // Extract main value according to table type
+                                                $valor_resultado = '';
+                                                $referencia = '';
+                                                
+                                                switch ($tabla_resultado) {
+                                                    case 'examen_tipo_1':
+                                                        $valor_resultado = $datos_resultado['valoracion'] ?? '';
+                                                        break;
+                                                    case 'examen_tipo_2':
+                                                        $valor_resultado = $datos_resultado['valoracion'] ?? '';
+                                                        break;
+                                                    case 'examen_tipo_3':
+                                                        $valores_clave = ['densidad', 'color', 'ph', 'proteinas', 'glucosa', 'bilirrubina', 'nitritos', 'leucocitos'];
+                                                        foreach ($valores_clave as $campo) {
+                                                            if (!empty($datos_resultado[$campo]) && $datos_resultado[$campo] !== 'N/A') {
+                                                                $valor_resultado .= ($valor_resultado ? ', ' : '') . $campo . ': ' . $datos_resultado[$campo];
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 'examen_tipo_5':
+                                                        $hemograma_clave = ['hemoglobina', 'hematocrito', 'leucocitos'];
+                                                        foreach ($hemograma_clave as $campo) {
+                                                            if (!empty($datos_resultado[$campo]) && $datos_resultado[$campo] !== 'N/A') {
+                                                                $valor_resultado .= ($valor_resultado ? ', ' : '') . $campo . ': ' . $datos_resultado[$campo];
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 'perfilLipidico':
+                                                        $lipidos_clave = ['colesterol_total', 'colesterol_hdl', 'trigliceridos'];
+                                                        foreach ($lipidos_clave as $campo) {
+                                                            if (!empty($datos_resultado[$campo]) && $datos_resultado[$campo] !== 'N/A') {
+                                                                $valor_resultado .= ($valor_resultado ? ', ' : '') . $campo . ': ' . $datos_resultado[$campo];
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 'hemogramaRayto':
+                                                        $auto_clave = ['WBC', 'RBC', 'HGB', 'HCT', 'PLT'];
+                                                        foreach ($auto_clave as $campo) {
+                                                            if (!empty($datos_resultado[$campo]) && $datos_resultado[$campo] !== 'N/A') {
+                                                                $valor_resultado .= ($valor_resultado ? ', ' : '') . $campo . ': ' . $datos_resultado[$campo];
+                                                            }
+                                                        }
+                                                        break;
+                                                    default:
+                                                        foreach ($datos_resultado as $columna => $valor) {
+                                                            if (in_array(strtolower($columna), ['resultado', 'valor', 'result', 'value']) && !empty($valor)) {
+                                                                $valor_resultado = $valor;
+                                                                break;
+                                                            }
+                                                        }
+                                                        
+                                                        if (empty($valor_resultado)) {
+                                                            $excluir = ['ind', 'identificacion', 'codexamen', 'examen', 'fecha', 'hora', 'id', 'bacteriologo', 'observaciones'];
+                                                            foreach ($datos_resultado as $columna => $valor) {
+                                                                if (!in_array(strtolower($columna), $excluir) && !empty($valor) && $valor !== '0000-00-00' && $valor !== '0' && $valor !== 'N/A') {
+                                                                    $valor_resultado = $valor;
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+                                                }
+                                                
+                                                // Extract reference if exists
+                                                $ref_campos = ['referencia', 'rango', 'valor_de_referencia'];
+                                                foreach ($ref_campos as $campo) {
+                                                    if (!empty($datos_resultado[$campo]) && $datos_resultado[$campo] !== 'N/A') {
+                                                        $referencia = $datos_resultado[$campo];
+                                                        break;
+                                                    }
+                                                }
+                                                
+                                                $examen_data['resultado'] = $valor_resultado ?: 'Sin valor';
+                                                $examen_data['referencia'] = $referencia ?: 'N/A';
+                                                $examen_data['estado'] = 'Completado';
+                                                $examen_data['resultado_completo'] = $datos_resultado;
+                                            } else {
+                                                $examen_data['resultado'] = 'Pendiente';
+                                                $examen_data['referencia'] = 'N/A';
+                                                $examen_data['estado'] = 'Pendiente';
+                                            }
+                                        } catch (Exception $e) {
+                                            $examen_data['resultado'] = 'Error en consulta';
+                                            $examen_data['referencia'] = 'N/A';
+                                            $examen_data['estado'] = 'Error';
+                                        }
+                                    } else {
+                                        $examen_data['resultado'] = 'Sin datos';
+                                        $examen_data['referencia'] = 'N/A';
+                                        $examen_data['estado'] = 'Sin datos';
+                                    }
+                                } else {
+                                    $examen_data['resultado'] = 'Tabla no encontrada';
+                                    $examen_data['referencia'] = 'N/A';
+                                    $examen_data['estado'] = 'Error';
+                                }
+                            } else {
+                                $examen_data['nombre'] = 'Examen #' . $examen_row['codexamen'];
+                                $examen_data['tipo'] = 'No especificado';
+                                $examen_data['tabla'] = '';
+                                $examen_data['procedimiento'] = '';
+                                $examen_data['resultado'] = 'No disponible';
+                                $examen_data['referencia'] = 'N/A';
+                                $examen_data['estado'] = 'N/A';
+                            }
+                        } else {
+                            $examen_data['nombre'] = 'Examen #' . $examen_row['codexamen'];
+                            $examen_data['resultado'] = 'No disponible';
+                            $examen_data['estado'] = 'N/A';
+                        }
+                        
+                        // If only concrete results are requested, filter
+                        if ($solo_con_resultados == '1' && ($examen_data['estado'] == 'Pendiente' || $examen_data['resultado'] == 'No disponible')) {
+                            continue;
+                        }
+                        
+                        $paciente_data['examenes'][] = $examen_data;
+                    }
+                    
+                    $paciente_data['total_examenes'] = count($paciente_data['examenes']);
+                    $paciente_data['examenes_con_resultados'] = count(array_filter($paciente_data['examenes'], function ($ex) {
+                        return isset($ex['estado']) && $ex['estado'] == 'Completado';
+                    }));
+                }
+                
+                $pacientes[] = $paciente_data;
+            }
+            
+            $response = [
+                'success' => true,
+                'pacientes' => $pacientes,
+                'total_pacientes' => count($pacientes),
+                'criterios' => [
+                    'identificacion' => $identificacion,
+                    'nombres' => $nombres,
+                    'telefono' => $telefono,
+                    'ciudad' => $ciudad,
+                    'entidad' => $entidad,
+                    'include_examenes' => $include_examenes,
+                    'solo_con_resultados' => $solo_con_resultados,
+                    'limit' => $limit
+                ]
+            ];
+            
+            echo json_encode($response, JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+        
+        // Get POST parameters for original functionality
         $search = isset($_POST['search']) ? trim($_POST['search']) : '';
         $fecha = isset($_POST['fecha']) ? trim($_POST['fecha']) : '';
         

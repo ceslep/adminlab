@@ -5,7 +5,7 @@
     import Button from '../shared/Button.svelte';
     
     export let searchQuery: string = '';
-    export let selectedDate: string = '';
+    export let selectedDate: string = new Date().toISOString().split('T')[0];
     export let totalPatients: number = 0;
     export let onSearch: () => void;
     export let onDateChange: () => void;

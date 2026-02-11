@@ -5,7 +5,7 @@ export function getEstadoVariant(estado: string): 'indigo' | 'emerald' | 'violet
                 return 'green';
             case 'proceso':
             case 'pendiente':
-                return 'yellow';
+                return 'amber';
             case 'cancelado':
                 return 'rose';  // Usar 'rose' en lugar de 'red'
             default:

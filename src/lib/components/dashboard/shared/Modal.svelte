@@ -10,11 +10,14 @@
     export let size: 'sm' | 'md' | 'lg' | 'xl' = 'md';
     export let showCloseButton: boolean = true;
     export let closeOnBackdrop: boolean = true;
+    export let onClose: () => void = () => {};
     
     const dispatch = createEventDispatcher();
     
     function handleClose() {
+        console.log('🔴 Modal handleClose() llamado');
         dispatch('close');
+        onClose();
     }
     
     function handleBackdropClick(e: MouseEvent) {
@@ -38,10 +41,10 @@
     }
     
     const sizeClasses = {
-        sm: 'max-w-md',
-        md: 'max-w-lg',
-        lg: 'max-w-3xl',
-        xl: 'max-w-6xl'
+        sm: 'max-width: var(--modal-max-width-sm)',
+        md: 'max-width: var(--modal-max-width-md)',
+        lg: 'max-width: var(--modal-max-width-lg)',
+        xl: 'max-width: var(--modal-max-width-xl)'
     };
 </script>
 
@@ -57,7 +60,8 @@
         out:fade={{ duration: 200 }}
     >
         <div 
-            class="modal-container {sizeClasses[size]}"
+            class="modal-container"
+            style={sizeClasses[size]}
             in:fade={{ duration: 300 }}
             out:fade={{ duration: 200 }}
             role="dialog"
@@ -108,53 +112,54 @@
     .modal-backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(8px);
+        background: var(--modal-backdrop-bg);
+        backdrop-filter: var(--backdrop-blur-md);
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 2rem;
-        z-index: 9999;
+        padding: var(--spacing-8);
+        z-index: var(--z-index-modal-backdrop);
         overflow-y: auto;
     }
     
     .modal-container {
-        background: rgba(255, 255, 255, 0.9);
-        backdrop-filter: blur(20px);
+        background: var(--color-surface-glass);
+        backdrop-filter: var(--backdrop-blur-2xl);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 2rem;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        max-height: calc(100vh - 4rem);
+        border-radius: var(--radius-3xl);
+        box-shadow: var(--shadow-xl);
+        max-height: calc(100vh - var(--spacing-16));
         overflow-y: auto;
         position: relative;
-        z-index: 1;
+        z-index: var(--z-index-modal);
+        width: 100%;
     }
     
     .modal-container::-webkit-scrollbar {
-        width: 8px;
+        width: var(--spacing-2);
     }
     
     .modal-container::-webkit-scrollbar-track {
-        background: rgba(241, 245, 249, 0.5);
-        border-radius: 4px;
+        background: var(--color-neutral-100);
+        border-radius: var(--radius-base);
     }
     
     .modal-container::-webkit-scrollbar-thumb {
-        background: rgba(148, 163, 184, 0.3);
-        border-radius: 4px;
+        background: var(--color-neutral-300);
+        border-radius: var(--radius-base);
     }
     
     .modal-container::-webkit-scrollbar-thumb:hover {
-        background: rgba(148, 163, 184, 0.5);
+        background: var(--color-neutral-400);
     }
     
     .modal-header {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        padding: 2.5rem 2.5rem 1.5rem;
-        border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-        gap: 1rem;
+        padding: var(--spacing-10) var(--spacing-10) var(--spacing-6);
+        border-bottom: 1px solid var(--color-border);
+        gap: var(--spacing-4);
     }
     
     .modal-header-content {
@@ -163,37 +168,39 @@
     }
     
     .modal-title {
-        font-size: 1.875rem;
-        font-weight: 800;
-        color: #1e293b;
-        margin: 0 0 0.5rem 0;
-        line-height: 1.2;
-        background: linear-gradient(135deg, #1e293b, #6366f1);
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-extrabold);
+        color: var(--color-neutral-800);
+        margin: 0 0 var(--spacing-2) 0;
+        line-height: var(--line-height-tight);
+        background: linear-gradient(135deg, var(--color-neutral-800), var(--color-primary-500));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        font-family: var(--font-family-sans);
     }
     
     .modal-subtitle {
-        font-size: 1rem;
-        color: #64748b;
+        font-size: var(--font-size-base);
+        color: var(--color-text-secondary);
         margin: 0;
-        line-height: 1.6;
-        font-weight: 500;
+        line-height: var(--line-height-relaxed);
+        font-weight: var(--font-weight-medium);
+        font-family: var(--font-family-sans);
     }
     
     .modal-close-button {
         width: 44px;
         height: 44px;
-        border-radius: 1rem;
+        border-radius: var(--radius-xl);
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
         border: 1px solid rgba(239, 68, 68, 0.25);
-        color: #dc2626;
+        color: var(--color-error-600);
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all var(--duration-normal) var(--ease-out);
         flex-shrink: 0;
         position: relative;
         overflow: hidden;
@@ -203,7 +210,7 @@
     .modal-close-button:hover {
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.3), rgba(220, 38, 38, 0.25));
         border-color: rgba(239, 68, 68, 0.5);
-        color: #991b1b;
+        color: var(--color-error-700);
         transform: rotate(180deg) scale(1.1);
         box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
         border-width: 2px;
@@ -224,7 +231,7 @@
     .close-icon {
         width: 20px;
         height: 20px;
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform var(--duration-normal) var(--ease-out);
     }
 
     .close-button-glow {
@@ -232,54 +239,47 @@
         inset: 0;
         background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
         transform: translateX(-100%);
-        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: transform var(--duration-slow) var(--ease-out);
         pointer-events: none;
     }
     
-    .modal-close-button:hover {
-        background: rgba(239, 68, 68, 0.2);
-        transform: scale(1.05);
-    }
-
-
-
     .modal-close-button:hover .close-button-glow {
         transform: translateX(0);
     }
     
     .modal-body {
-        padding: 2.5rem;
+        padding: var(--spacing-10);
     }
     
     .modal-footer {
-        padding: 1.5rem 2.5rem 2.5rem;
-        border-top: 1px solid rgba(226, 232, 240, 0.6);
+        padding: var(--spacing-6) var(--spacing-10) var(--spacing-10);
+        border-top: 1px solid var(--color-border);
     }
     
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .modal-backdrop {
-            padding: 1rem;
+            padding: var(--spacing-4);
         }
         
         .modal-container {
-            max-height: calc(100vh - 2rem);
+            max-height: calc(100vh - var(--spacing-8));
         }
         
         .modal-header {
-            padding: 2rem 1.5rem 1rem;
+            padding: var(--spacing-8) var(--spacing-6) var(--spacing-4);
         }
         
         .modal-body {
-            padding: 1.5rem;
+            padding: var(--spacing-6);
         }
         
         .modal-footer {
-            padding: 1rem 1.5rem 1.5rem;
+            padding: var(--spacing-4) var(--spacing-6) var(--spacing-6);
         }
         
         .modal-title {
-            font-size: 1.5rem;
+            font-size: var(--font-size-2xl);
         }
     }
     
@@ -290,10 +290,10 @@
     
     @keyframes modalGlow {
         0%, 100% {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(99, 102, 241, 0.1);
+            box-shadow: var(--shadow-xl), 0 0 0 1px rgba(99, 102, 241, 0.1);
         }
         50% {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(99, 102, 241, 0.2);
+            box-shadow: var(--shadow-xl), 0 0 0 2px rgba(99, 102, 241, 0.2);
         }
     }
 </style>

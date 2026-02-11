@@ -8,21 +8,67 @@
     export let onClick: (() => void) | undefined = undefined;
     
     const variants = {
-        primary: 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white shadow-indigo-500/25',
-        secondary: 'bg-gradient-to-r from-indigo-50 to-indigo-100 hover:from-indigo-100 hover:to-indigo-200 text-indigo-700 border-2 border-indigo-300/50 shadow-indigo-200/50 hover:shadow-indigo-300/50',
-        success: 'bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white shadow-emerald-500/25',
-        danger: 'bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white shadow-red-500/25'
+        primary: {
+            background: 'var(--gradient-primary)',
+            hover: 'var(--gradient-primary-hover)',
+            color: 'var(--color-neutral-0)',
+            shadow: '0 10px 25px -5px rgba(99, 102, 241, 0.35)'
+        },
+        secondary: {
+            background: 'var(--gradient-neutral)',
+            hover: 'linear-gradient(135deg, var(--color-primary-100), var(--color-primary-200))',
+            color: 'var(--color-primary-700)',
+            shadow: '0 4px 6px -1px rgba(99, 102, 241, 0.1)',
+            border: '2px solid var(--color-primary-300/50)'
+        },
+        success: {
+            background: 'var(--gradient-success)',
+            hover: 'linear-gradient(135deg, var(--color-success-600), var(--color-success-700))',
+            color: 'var(--color-neutral-0)',
+            shadow: '0 10px 25px -5px rgba(16, 185, 129, 0.35)'
+        },
+        danger: {
+            background: 'var(--gradient-error)',
+            hover: 'linear-gradient(135deg, var(--color-error-600), var(--color-error-700))',
+            color: 'var(--color-neutral-0)',
+            shadow: '0 10px 25px -5px rgba(239, 68, 68, 0.35)'
+        }
     };
     
     const sizes = {
-        sm: 'text-sm px-4 py-2',
-        md: 'text-sm px-5 py-2.5',
-        lg: 'text-base px-6 py-3'
+        sm: {
+            height: 'var(--button-height-sm)',
+            padding: '0 var(--button-padding-x-sm)',
+            fontSize: 'var(--font-size-xs)'
+        },
+        md: {
+            height: 'var(--button-height-md)',
+            padding: '0 var(--button-padding-x-md)',
+            fontSize: 'var(--font-size-sm)'
+        },
+        lg: {
+            height: 'var(--button-height-lg)',
+            padding: '0 var(--button-padding-x-lg)',
+            fontSize: 'var(--font-size-base)'
+        }
     };
+    
+    $: currentVariant = variants[variant];
+    $: currentSize = sizes[size];
 </script>
 
 <button 
-    class="btn {variants[variant]} {sizes[size]} {fullWidth ? 'w-full' : ''}"
+    class="btn-base"
+    class:full-width={fullWidth}
+    style="
+        background: {currentVariant.background};
+        color: {currentVariant.color};
+        box-shadow: {currentVariant.shadow};
+        height: {currentSize.height};
+        padding: {currentSize.padding};
+        font-size: {currentSize.fontSize};
+        {'border' in currentVariant ? `border: ${currentVariant.border};` : ''}
+    "
     {disabled}
     on:click={onClick}
 >
@@ -34,55 +80,27 @@
         {/if}
         <slot></slot>
     {/if}
+    
+    <!-- Button overlay for hover effect -->
+    <div class="button-overlay"></div>
 </button>
 
 <style>
-    /* Enhanced Button Styles v2.0 */
-    .btn {
-        border: none;
-        border-radius: 0.75rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        font-family: inherit;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.625rem;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    .full-width {
+        width: 100%;
     }
     
-    .btn::before {
-        content: '';
+    .button-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent);
         opacity: 0;
-        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: opacity var(--duration-normal) var(--ease-out);
         pointer-events: none;
     }
     
-    .btn:hover:not(:disabled) {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 15px 25px -5px rgba(99, 102, 241, 0.25), 0 8px 12px -4px rgba(99, 102, 241, 0.15);
-    }
-    
-    .btn:hover:not(:disabled)::before {
+    :global(.btn-base:hover .button-overlay) {
         opacity: 1;
-    }
-    
-    .btn:active:not(:disabled) {
-        transform: translateY(-1px) scale(0.98);
-        box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.15), 0 4px 8px -2px rgba(0, 0, 0, 0.1);
-    }
-    
-    .btn:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none !important;
-        box-shadow: none;
     }
     
     .spinner {

@@ -5,6 +5,7 @@
     import LoadingSpinner from '../shared/LoadingSpinner.svelte';
     import { onMount } from 'svelte';
     import { getEstadoVariant } from './getEstadoVariant';
+    import { API_BASE_URL, EXAMENES_PACIENTE_ENDPOINT, RESULTADOS_EXAMEN_ENDPOINT } from '$lib/constants';
     
     export let paciente: any;
     export let show: boolean = false;
@@ -18,6 +19,10 @@
     let examenSeleccionado: any = null;
     let resultadosExamen: any = null;
     let loadingResultados = false;
+    
+    function getDefaultDate(): string {
+        return new Date().toISOString().split('T')[0];
+    }
     
     // Cargar exámenes cuando se abre el modal
     $: if (show && paciente?.identificacion) {
@@ -35,14 +40,14 @@
         
         try {
             // Llamar al API para obtener los exámenes del paciente
-            const response = await fetch(`${getApiBaseUrl()}/examenes_paciente.php`, {
+            const response = await fetch(`${API_BASE_URL}${EXAMENES_PACIENTE_ENDPOINT}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
                 body: new URLSearchParams({
                     identificacion: paciente.identificacion,
-                    fecha: selectedDate
+                    fecha: selectedDate || getDefaultDate()
                 })
             });
             
@@ -60,7 +65,7 @@
                 examenesDetallados = paciente.examenes_codigos?.map((codigo: string, index: number) => ({
                     codigo: codigo,
                     nombre: paciente.examenes[index] || `Examen ${codigo}`,
-                    fecha: selectedDate || new Date().toISOString().split('T')[0],
+                fecha: selectedDate || getDefaultDate(),
                     estado: 'Pendiente',
                     realizado: false,
                     entidad: paciente.entidad
@@ -92,7 +97,7 @@
         
         try {
             // Intentar obtener resultados del examen
-            const response = await fetch(`${getApiBaseUrl()}/resultados_examen.php`, {
+            const response = await fetch(`${API_BASE_URL}${RESULTADOS_EXAMEN_ENDPOINT}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -135,9 +140,7 @@
         }
     }
     
-    function getApiBaseUrl(): string {
-        return 'https://mycar.iedeoccidente.com/api';
-    }
+
     
 
     

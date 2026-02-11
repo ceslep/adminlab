@@ -3,30 +3,96 @@
     export let variant: 'indigo' | 'emerald' | 'violet' | 'amber' | 'rose' | 'slate' | 'blue' | 'green' | 'purple' | 'yellow' | 'red' | 'gray' = 'indigo';
     export let size: 'sm' | 'md' = 'md';
     
-const variants = {
-        indigo: 'bg-indigo-50 text-indigo-700 border border-indigo-200/60',
-        emerald: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
-        violet: 'bg-violet-50 text-violet-700 border border-violet-200/60',
-        amber: 'bg-amber-50 text-amber-700 border border-amber-200/60',
-        rose: 'bg-rose-50 text-rose-700 border border-rose-200/60',
-        slate: 'bg-slate-50 text-slate-700 border border-slate-200/60',
+    const variants = {
+        indigo: {
+            background: 'var(--color-primary-50)',
+            color: 'var(--color-primary-700)',
+            border: '1px solid var(--color-primary-200/60)'
+        },
+        emerald: {
+            background: 'var(--color-success-50)',
+            color: 'var(--color-success-700)',
+            border: '1px solid var(--color-success-200/60)'
+        },
+        violet: {
+            background: 'var(--color-secondary-50)',
+            color: 'var(--color-secondary-700)',
+            border: '1px solid var(--color-secondary-200/60)'
+        },
+        amber: {
+            background: 'var(--color-warning-50)',
+            color: 'var(--color-warning-700)',
+            border: '1px solid var(--color-warning-200/60)'
+        },
+        rose: {
+            background: 'var(--color-error-50)',
+            color: 'var(--color-error-700)',
+            border: '1px solid var(--color-error-200/60)'
+        },
+        slate: {
+            background: 'var(--color-neutral-100)',
+            color: 'var(--color-neutral-700)',
+            border: '1px solid var(--color-neutral-200/60)'
+        },
         // Legacy variants mapped to new ones
-        blue: 'bg-indigo-50 text-indigo-700 border border-indigo-200/60',
-        green: 'bg-emerald-50 text-emerald-700 border border-emerald-200/60',
-        purple: 'bg-violet-50 text-violet-700 border border-violet-200/60',
-        yellow: 'bg-amber-50 text-amber-700 border border-amber-200/60',
+        blue: {
+            background: 'var(--color-primary-50)',
+            color: 'var(--color-primary-700)',
+            border: '1px solid var(--color-primary-200/60)'
+        },
+        green: {
+            background: 'var(--color-success-50)',
+            color: 'var(--color-success-700)',
+            border: '1px solid var(--color-success-200/60)'
+        },
+        purple: {
+            background: 'var(--color-secondary-50)',
+            color: 'var(--color-secondary-700)',
+            border: '1px solid var(--color-secondary-200/60)'
+        },
+        yellow: {
+            background: 'var(--color-warning-50)',
+            color: 'var(--color-warning-700)',
+            border: '1px solid var(--color-warning-200/60)'
+        },
         // Additional variants
-        red: 'bg-red-50 text-red-700 border border-red-200/60',
-        gray: 'bg-slate-50 text-slate-700 border border-slate-200/60'
+        red: {
+            background: 'var(--color-error-50)',
+            color: 'var(--color-error-700)',
+            border: '1px solid var(--color-error-200/60)'
+        },
+        gray: {
+            background: 'var(--color-neutral-100)',
+            color: 'var(--color-neutral-700)',
+            border: '1px solid var(--color-neutral-200/60)'
+        }
     };
     
     const sizes = {
-        sm: 'text-xs px-2.5 py-1',
-        md: 'text-sm px-3 py-1.5'
+        sm: {
+            fontSize: 'var(--font-size-xs)',
+            padding: 'var(--spacing-1) var(--spacing-2.5)'
+        },
+        md: {
+            fontSize: 'var(--font-size-sm)',
+            padding: 'var(--spacing-1.5) var(--spacing-3)'
+        }
     };
+    
+    $: currentVariant = variants[variant];
+    $: currentSize = sizes[size];
 </script>
 
-<span class="badge {variants[variant]} {sizes[size]}">
+<span 
+    class="badge"
+    style="
+        background: {currentVariant.background};
+        color: {currentVariant.color};
+        border: {currentVariant.border};
+        font-size: {currentSize.fontSize};
+        padding: {currentSize.padding};
+    "
+>
     {text}
 </span>
 
@@ -34,14 +100,15 @@ const variants = {
     .badge {
         display: inline-flex;
         align-items: center;
-        border-radius: 9999px;
-        font-weight: 600;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: var(--radius-full);
+        font-weight: var(--font-weight-semibold);
+        transition: all var(--duration-fast) var(--ease-out);
         white-space: nowrap;
+        font-family: var(--font-family-sans);
     }
     
     .badge:hover {
         transform: scale(1.05);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-sm);
     }
 </style>
